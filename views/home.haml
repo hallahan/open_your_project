@@ -1,0 +1,40 @@
+.main
+  .box.feature
+    %div
+      » Invite others to participate, and remix your ideas.
+    %div
+      » Get credit as the originator or contributor to a project.
+    .open
+      .action
+        Open your own project
+      %div
+        %form{:method => 'post', :action => "/"}
+          %div
+            %input{:type => 'text', :name => 'url', :class => "big cleardefault", :value => 'http://yourgreatproject.org'}
+          %div
+            %input{:type => 'submit', :value => 'Start Collaborating', :class => 'big'}
+          %div
+            %small
+              Your content will be copied to this site, licensed
+              %a{:href => "http://creativecommons.org/licenses/by-sa/3.0/us/", :rel => "license", :target => "_blank"} Creative Commons BY-SA
+
+.sidebar
+  .box.feature
+    %h2 Featured Open Projects
+    -#%ul
+    -#  - @featured_sites.each do |site|
+    -#    %li
+    -#      = link_to( site[ :name ], nodes_best_match_path( site[ :name ] ) )
+    -#      \:
+    -#      \#{site[ :description ]}
+    -#      - unless site[ :url ].match( %r{^http://openyourproject\.org} )
+    -#        %small
+    -#          [#{link_to 'original site', site[ :url ]}]
+    -#  %li
+    -#    = link_to( 'More projects...', nodes_path )
+  / <h2>Tags</h2>
+  / <div>
+  / <haml:silent> @tags.each do |tag| </haml:silent><haml:block>
+  / &amp;nbsp; <haml:loud> link_to tag, nodes_related_to_path( tag ) </haml:loud>
+  / </haml:block>
+  / </div>

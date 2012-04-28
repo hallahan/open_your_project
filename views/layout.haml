@@ -1,0 +1,25 @@
+!!! 5
+%html
+  %head
+    %title Open Your Project
+    %meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+    %meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no")
+    %link(type="image/png" href="/favicon.png" rel="icon")
+    %link(type="text/css" href="/style.css" rel="stylesheet")
+    %script(type="text/javascript" src="/clear_default_text/util_functions")
+    %script(type="text/javascript" src="/clear_default_text/clear_default_text")
+  %body
+    .box
+      %h1
+        Open Your Project
+        %span.beta [ beta ]
+      .nav
+        %a{:href => "/"} Home
+    -#= flash_message_divs
+    = yield
+    .footer
+      %span.powered
+        [
+        Powered by
+        %a{:href => 'http://wardcunningham.github.com/'} Smallest Federated Wiki
+        ]
