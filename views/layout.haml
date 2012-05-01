@@ -58,15 +58,20 @@
             %li.post
               %a{:href => "/pub/The_Trust_Exchange_is_Landing/index.html"} The Trust Exchange is Landing
 
-    Content on this site is free and remixable under a
+  %footer
+    A
+    %a{:href => 'http://enlightenedstructure.org/Software_Zero/'} Software Zero
+    project,
+
+    powered by
+    = succeed "," do
+      %a{:href => 'http://wardcunningham.github.com/'} Smallest Federated Wiki
+
+    with design by
     = succeed "." do
-      %a{:href => "http://creativecommons.org/licenses/by-sa/3.0/"} Creative Commons Attribution-ShareAlike License
+      %a{:href => "http://octopress.org"} Octopress.
+    &nbsp;
 
-    %span.credit
-      \&nbsp;Powered by
-      = succeed "." do
-        %a{:href => 'http://enlightenedstructure.org/Software_Zero/'} Software Zero
-
-      \&nbsp;Awesome by
-      = succeed "." do
-        %a{:href => "http://octopress.org"} Octopress
+    This is free software dedicated to the open curation of the
+    %a{:href => 'http://creativecommons.org/about'} Creative Commons
+    of our world.
