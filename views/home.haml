@@ -1,13 +1,17 @@
-%div
-  &raquo;
-  Your project becomes part of the
-  Creative Commons, where others can
-  contribute ideas and suggest improvements
-%div
-  &raquo;
-  Your project is an idea seed, giving birth
-  to trees of remixes, spreading through
-  communities and trust networks
+%ul.overview
+  %li
+    &raquo;
+    Open any Creative Commons licensed project
+    into an open wiki collaboration framework
+  %li
+    &raquo;
+    Others can copy the project,
+    contribute ideas and suggest improvements
+  %li
+    &raquo;
+    The project is an idea seed, giving birth
+    to trees of remixes, spreading through
+    communities and trust networks
 
 .open
   .action
@@ -15,7 +19,7 @@
   %div
     %form{:method => 'post', :action => "/"}
       %div
-        %input{:type => 'text', :name => 'url', :class => "big cleardefault", :value => 'http://yourgreatproject.org'}
+        %input{:type => 'text', :name => 'url', :class => "big cleardefault", :placeholder => 'http://yourgreatproject.org'}
       %div
         %input{:type => 'submit', :value => 'Open Now', :class => 'big'}
       %div

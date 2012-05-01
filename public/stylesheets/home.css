@@ -36,3 +36,8 @@ input[type=submit]:hover {
   font-size: 2em;
   font-weight: bold;
 }
+
+ul.overview > li {
+  list-style: none;
+  margin-bottom: 1em;
+}

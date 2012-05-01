@@ -34,11 +34,11 @@
   %nav{:role => "navigation"}
     %form{:action => "http://google.com/search", :method => "get"}
       %fieldset{:role => "search"}
-        %input{:name => "q", :type => "hidden", :value => "site:http://openyourproject.org/"}/
+        %input{:name => "q", :type => "hidden", :value => "site:openyourproject.org"}/
         %input.search{:name => "q", :placeholder => "Search", :results => "0", :type => "text"}/
     %ul.main-navigation
       %li
-        %a{:href => "/"} Home
+        -#%a{:href => "/"} Home
   #main
     #content
       %div
@@ -63,7 +63,14 @@
           #chart
           %script{:src => "/javascripts/viz/pack.js", :type => "text/javascript"}
 
+
+
   %footer
+    Free software for the open curation of the
+    /%a{:href => 'http://creativecommons.org/about'}
+    Creative Commons.
+    &nbsp; &nbsp;
+
     A
     %a{:href => 'http://enlightenedstructure.org/Software_Zero/'} Software Zero
     project,
@@ -72,11 +79,8 @@
     = succeed "," do
       %a{:href => 'http://wardcunningham.github.com/'} Smallest Federated Wiki
 
-    with design by
+    repsonsive design by
     = succeed "." do
       %a{:href => "http://octopress.org"} Octopress.
     &nbsp;
 
-    This is free software dedicated to the open curation of the
-    %a{:href => 'http://creativecommons.org/about'} Creative Commons
-    of our world.
