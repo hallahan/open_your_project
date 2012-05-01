@@ -1,25 +1,71 @@
-!!! 5
-%html
-  %head
-    %title Open Your Project
-    %meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
-    %meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no")
-    %link(type="image/png" href="/favicon.png" rel="icon")
-    %link(type="text/css" href="/style.css" rel="stylesheet")
-    %script(type="text/javascript" src="/clear_default_text/util_functions")
-    %script(type="text/javascript" src="/clear_default_text/clear_default_text")
+!!!
+/[if IEMobile 7] <html class="no-js iem7">
+/[if lt IE 9] <html class="no-js lte-ie8">
+/[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><html class="no-js" lang="en">
+%head
+  %meta{:charset => "utf-8"}/
+  %title Open Your Project
+  %meta{:content => "", :name => "author"}/
+  %meta{:content => "\n\n  \n  Enlightened Structure: A web of projects intended to further our creative and humanistic evolution as a species. Many of our problems (such ...", :name => "description"}/
+  / http://t.co/dKP3o1e
+  %meta{:content => "True", :name => "HandheldFriendly"}/
+  %meta{:content => "320", :name => "MobileOptimized"}/
+  %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+  %link{:href => "/favicon.png", :rel => "icon"}/
+  %link{:href => "/stylesheets/screen.css", :media => "screen, projection", :rel => "stylesheet", :type => "text/css"}/
+  %script{:src => "/javascripts/modernizr-2.0.js"}
+  %script{:src => "/javascripts/ender.js"}
+  %script{:src => "/javascripts/octopress.js", :type => "text/javascript"}
+  %script{:src => "/javascripts/clear_default_text/clear_default_text", :type => "text/javascript"}
+  %script{:src => "/javascripts/clear_default_text/util_functions", :type => "text/javascript"}
+
+  / Fonts from Google"s Web font directory at http://google.com/webfonts
+  %link{:href => "http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic", :rel => "stylesheet", :type => "text/css"}/
+  %link{:href => "http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic", :rel => "stylesheet", :type => "text/css"}/
   %body
-    .box
-      %h1
-        Open Your Project
-        %span.beta [ beta ]
-      .nav
-        %a{:href => "/"} Home
-    -#= flash_message_divs
-    = yield
-    .footer
-      %span.powered
-        [
-        Powered by
-        %a{:href => 'http://wardcunningham.github.com/'} Smallest Federated Wiki
-        ]
+    %header{:role => "banner"}
+      %hgroup
+        %h1
+          %a{:href => "/"} Open Your Project
+        %h2 Creative collaboration for social change projects
+    %nav{:role => "navigation"}
+      %form{:action => "http://google.com/search", :method => "get"}
+        %fieldset{:role => "search"}
+          %input{:name => "q", :type => "hidden", :value => "site:http://openyourproject.org/"}/
+          %input.search{:name => "q", :placeholder => "Search", :results => "0", :type => "text"}/
+      %ul.main-navigation
+        %li
+          %a{:href => "/"} Home
+    #main
+      #content
+        %div
+          %article{:role => "article"}
+            = yield
+
+        %aside.sidebar
+          %section
+            %h1 Tags
+            %ul#pages
+              %li.post
+                %a{:href => "/pub/Human_Potential/index.html"} Human Potential
+              %li.post
+                %a{:href => "/pub/Open_Source_Transformation/index.html"} Open Source Transformation
+              %li.post
+                %a{:href => "/pub/Quotations/index.html"} Quotes
+              %li.post
+                %a{:href => "/pub/Spiritual_Transhumanism/index.html"} Spiritual Transhumanism
+              %li.post
+                %a{:href => "/pub/The_Trust_Exchange_is_Landing/index.html"} The Trust Exchange is Landing
+
+      Content on this site is free and remixable under a
+      = succeed "." do
+        %a{:href => "http://creativecommons.org/licenses/by-sa/3.0/"} Creative Commons Attribution-ShareAlike License
+
+      %span.credit
+        \&nbsp;Powered by
+        = succeed "." do
+          %a{:href => 'http://enlightenedstructure.org/Software_Zero/'} Software Zero
+
+        \&nbsp;Awesome by
+        = succeed "." do
+          %a{:href => "http://octopress.org"} Octopress
