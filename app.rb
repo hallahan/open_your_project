@@ -5,7 +5,7 @@ get '/' do
   haml :home
 end
 
-get '/network-viz.json' do
+get '/viz/tags.json' do
   content_type 'application/json'
   %~
     {

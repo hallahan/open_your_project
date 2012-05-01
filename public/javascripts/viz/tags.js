@@ -6,14 +6,14 @@ var pack = d3.layout.pack()
     .size([width - 4, height - 4])
     .value(function(d) { return d.size; });
 
-var vis = d3.select("#chart").append("svg")
+var vis = d3.select("#viz-tags").append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("class", "pack")
   .append("g")
     .attr("transform", "translate(2, 2)");
 
-d3.json("/network-viz.json", function(json) {
+d3.json("/viz/tags.json", function(json) {
   var node = vis.data([json]).selectAll("g.node")
       .data(pack.nodes)
     .enter().append("g")
