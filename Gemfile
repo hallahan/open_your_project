@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'haml'
-gem 'sass'
 gem 'sinatra'
 
 group :development do
