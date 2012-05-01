@@ -1,22 +1,24 @@
 .main
   .box.feature
     %div
-      » Invite others to participate, and remix your ideas.
+      &#0187; Invite others to participate, and remix your ideas
     %div
-      » Get credit as the originator or contributor to a project.
+      &#0187; Receive attribution as the originator or contributor to a project
+    %div
+      &#0187; Any
+      %a{:href => "http://creativecommons.org/licenses/by-sa/3.0/us/", :rel => "license", :target => "_blank"} Creative Commons BY-SA
+      licenced site can be opened to the global community for remixing.
+
     .open
       .action
-        Open your own project
+        Enter a project website
       %div
         %form{:method => 'post', :action => "/"}
           %div
             %input{:type => 'text', :name => 'url', :class => "big cleardefault", :value => 'http://yourgreatproject.org'}
           %div
-            %input{:type => 'submit', :value => 'Start Collaborating', :class => 'big'}
+            %input{:type => 'submit', :value => 'Open Now', :class => 'big'}
           %div
-            %small
-              Your content will be copied to this site, licensed
-              %a{:href => "http://creativecommons.org/licenses/by-sa/3.0/us/", :rel => "license", :target => "_blank"} Creative Commons BY-SA
 
 .sidebar
   .box.feature
