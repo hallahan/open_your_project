@@ -9,72 +9,72 @@ get '/viz/tags.json' do
   content_type 'application/json'
   %~
     {
-      "name": "farm",
       "children": [
         {
-          "name": "bar.noah.lvh.me",
-          "children": [
-            {
-              "name": "Welcome Visitors",
-              "size": "1"
-            }
-          ]
+          "name": "Spirituality",
+          "size": "12"
         },
         {
-          "name": "foo.noah.lvh.me",
-          "children": [
-            {
-              "name": "Welcome Visitors",
-              "size": "1"
-            }
-          ]
+          "name": "Collaboration",
+          "size": "57"
         },
         {
-          "name": "localhost",
-          "children": [
-            {
-              "name": "Air Temperature",
-              "size": "1"
-            },
-            {
-              "name": "D3 Bars",
-              "size": "1"
-            },
-            {
-              "name": "D3 Bars",
-              "size": "1"
-            },
-            {
-              "name": "D3 Line",
-              "size": "1"
-            },
-            {
-              "name": "Welcome Visitors",
-              "size": "1"
-            }
-          ]
+          "name": "Technology",
+          "size": "27"
         },
         {
-          "name": "lvh.me",
-          "children": [
-            {
-              "name": "D3 Line",
-              "size": "1"
-            },
-            {
-              "name": "Welcome Visitors",
-              "size": "1"
-            }
-          ]
+          "name": "Education",
+          "size": "44"
         },
         {
-          "name": "noah.lvh.me",
-          "children": [
-            {
-              "name": "Welcome Visitors",
-              "size": "1"
-            }
-          ]
+          "name": "Culture",
+          "size": "29"
+        },
+        {
+          "name": "Arts",
+          "size": "35"
+        },
+        {
+          "name": "Social",
+          "size": "22"
+        }
+      ]
+    }
+  ~
+end
+
+get '/viz/curators.json' do
+  content_type 'application/json'
+  %~
+    {
+      "children": [
+        {
+          "name": "Ward",
+          "size": "431"
+        },
+        {
+          "name": "Bryan",
+          "size": "19"
+        },
+        {
+          "name": "Harlan",
+          "size": "27"
+        },
+        {
+          "name": "Nick",
+          "size": "106"
+        },
+        {
+          "name": "Stephen",
+          "size": "29"
+        },
+        {
+          "name": "Sven",
+          "size": "35"
+        },
+        {
+          "name": "Adam",
+          "size": "22"
         }
       ]
     }
