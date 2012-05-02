@@ -44,9 +44,6 @@
       %div
         %article{:role => "article"}
           = yield
-          #viz-curators-full
-          %script{:src => "/javascripts/viz/curators-full.js", :type => "text/javascript"}
-
 
       %aside.sidebar
         %section
@@ -55,7 +52,8 @@
           %script{:src => "/javascripts/viz/tags.js", :type => "text/javascript"}
         %section
           %h1 Top Curators
-          #viz-curators
+          %a{:href=>'/curators'}
+            #viz-curators
           %script{:src => "/javascripts/viz/curators.js", :type => "text/javascript"}
         -#%section
         -#  %h1 Tags
