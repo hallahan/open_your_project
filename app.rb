@@ -12,7 +12,12 @@ def development?
 end
 
 get '/' do
-  haml :home
+  if request.host.match /^www\./
+    haml :home
+  else
+    port_suffix = request.port == 80 ? '' : ":#{request.port}"
+    redirect "#{request.scheme}://www.#{request.host}#{port_suffix}"
+  end
 end
 
 post '/' do
