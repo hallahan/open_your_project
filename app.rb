@@ -47,12 +47,14 @@ post '/' do
   }
   create_action_json = JSON.pretty_generate(create_action)
 
-  topic = url.gsub(%r{^https?://(www\.)?}, '').split('.').first
+  topic = params[:topic].parameterize if params[:topic]
+  topic ||= url.gsub(%r{^https?://(www\.)?}, '').split('.').first
   subdomain = "#{topic}.#{params[:username].parameterize}"
   slug = title.parameterize
-  action_path = "/page/#{slug}/action"
+  base_host = request.host.gsub(/^www\./, '')
   port_suffix = development? ? ':1111' : ''
-  sfw_host = "#{request.scheme}://#{subdomain}.#{request.host}#{port_suffix}"
+  sfw_host = "#{request.scheme}://#{subdomain}.#{base_host}#{port_suffix}"
+  action_path = "/page/#{slug}/action"
 
   begin
     RestClient.put "#{sfw_host}#{action_path}", :action => create_action_json, :content_type => :json, :accept => :json
