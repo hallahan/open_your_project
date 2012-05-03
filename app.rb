@@ -1,8 +1,61 @@
-require 'sinatra'
 require 'haml'
+require 'html_massage'
+require 'json'
+require 'nokogiri'
+require 'rest_client'
+require 'sinatra'
+
+Dir[File.expand_path("lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
+
+def development?
+  ENV['RACK_ENV'] == 'development'
+end
 
 get '/' do
   haml :home
+end
+
+post '/' do
+  url = params[:url] =~ %r{^https?://} ? params[:url] : "http://#{params[:url]}"
+  html = RestClient.get url
+  title = (Nokogiri::HTML(html) / :title).inner_text
+
+  sfw_page_data = {
+    'title' => title,
+    'story' => []
+  }
+
+  text = HtmlMassage.text html
+  chunks = text.split(/\n{2,}/)
+  chunks.each do |chunk|
+    sfw_page_data['story'] << ({
+      'type' => 'paragraph',
+      'id' => RandomId.generate,
+      'text' => chunk
+    })
+  end
+
+  create_action = {
+    'type' => 'create',
+    'id' => RandomId.generate,
+    'item' => sfw_page_data
+  }
+  create_action_json = JSON.pretty_generate(create_action)
+
+  topic = url.gsub(%r{^https?://(www\.)?}, '').split('.').first
+  subdomain = "#{topic}.#{params[:username].parameterize}"
+  slug = title.parameterize
+  action_path = "/page/#{slug}/action"
+  port_suffix = development? ? ':1111' : ''
+  sfw_host = "#{request.scheme}://#{subdomain}.#{request.host}#{port_suffix}"
+
+  begin
+    RestClient.put "#{sfw_host}#{action_path}", :action => create_action_json, :content_type => :json, :accept => :json
+  rescue RestClient::Conflict
+    raise 'deal with conflicts'
+  end
+
+  redirect "#{sfw_host}/view/#{slug}"
 end
 
 get '/curators' do

@@ -19,7 +19,9 @@
   %div
     %form{:method => 'post', :action => "/"}
       %div
-        %input{:type => 'text', :name => 'url', :class => "big cleardefault", :placeholder => 'http://yourgreatproject.org'}
+        %input{:type => 'text', :name => 'url', :class => "big", :placeholder => 'www.change-the-world.org', :value => ('http://enlightenedstructure.org/Home/' if development?)}
+      %div
+        %input{:type => 'text', :name => 'username', :class => "", :placeholder => 'Your name or organization', :value => ('John Q. Public' if development?)}
       %div
         %input{:type => 'submit', :value => 'Open Now', :class => 'big'}
       %div

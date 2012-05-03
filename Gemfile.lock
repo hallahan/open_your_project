@@ -1,30 +1,43 @@
+GIT
+  remote: git://github.com/harlantwood/html_massage.git
+  revision: e1fb795b7d7d0c0ada5bf250f447692f3ba34bd4
+  ref: master
+  specs:
+    html_massage (0.1.1)
+      nokogiri (~> 1.4.4)
+      sanitize (~> 2.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    addressable (2.2.6)
-    awesome_print (0.4.0)
+    addressable (2.2.8)
+    awesome_print (1.0.2)
     haml (3.1.4)
-    heroku (2.14.0)
+    heroku (2.25.0)
       launchy (>= 0.3.2)
+      netrc (~> 0.7.1)
       rest-client (~> 1.6.1)
       rubyzip
-      term-ansicolor (~> 1.0.5)
-    launchy (2.0.5)
+    json (1.7.0)
+    launchy (2.1.0)
       addressable (~> 2.2.6)
-    mime-types (1.17.2)
-    rack (1.3.5)
-    rack-protection (1.1.4)
+    mime-types (1.18)
+    netrc (0.7.1)
+    nokogiri (1.4.7)
+    rack (1.4.1)
+    rack-protection (1.2.0)
       rack
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    rubyzip (0.9.5)
+    rubyzip (0.9.8)
+    sanitize (2.0.3)
+      nokogiri (>= 1.4.4, < 1.6)
     shotgun (0.9)
       rack (>= 1.0)
-    sinatra (1.3.1)
-      rack (~> 1.3, >= 1.3.4)
-      rack-protection (~> 1.1, >= 1.1.2)
+    sinatra (1.3.2)
+      rack (~> 1.3, >= 1.3.6)
+      rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
-    term-ansicolor (1.0.7)
     tilt (1.3.3)
 
 PLATFORMS
@@ -34,5 +47,9 @@ DEPENDENCIES
   awesome_print
   haml
   heroku
+  html_massage!
+  json
+  nokogiri
+  rest-client
   shotgun
   sinatra
