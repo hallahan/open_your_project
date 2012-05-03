@@ -45,10 +45,10 @@
           = yield
 
       %aside.sidebar
-        -#%section
-        -#  %h1 Top Tags
-        -#  #viz-tags
-        -#  %script{:src => "/javascripts/viz/tags.js", :type => "text/javascript"}
+        %section
+          %h1 Top Tags
+          #viz-tags
+          %script{:src => "/javascripts/viz/tags.js", :type => "text/javascript"}
         %section
           %h1 Top Curators
           %a{:href=>'/curators'}
@@ -84,7 +84,7 @@
     = succeed "," do
       %a{:href => 'http://wardcunningham.github.com/'} Smallest Federated Wiki
 
-    repsonsive design by
+    responsive design by
     = succeed "." do
       %a{:href => "http://octopress.org"} Octopress.
     &nbsp;
