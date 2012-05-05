@@ -1,2 +1,4 @@
 #viz-curators-full
-%script{:src => "/javascripts/viz/curators-full.js", :type => "text/javascript"}
+:javascript
+  var #{@viz}_json_path = '#{@json_path}';
+%script{:src => "/javascripts/viz/#{@viz}-full.js", :type => "text/javascript"}

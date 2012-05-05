@@ -1,4 +1,4 @@
-d3.json("/viz/curators-full.json", function(json) {
+d3.json(curators_json_path, function(json) {
 
   var width = 600,
       height = 600,

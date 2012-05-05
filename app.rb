@@ -51,22 +51,22 @@ post '/' do
   topic ||= url.gsub(%r{^https?://(www\.)?}, '').split('.').first
   subdomain = "#{topic}.#{params[:username].parameterize}"
   slug = title.parameterize
-  base_host = request.host.gsub(/^www\./, '')
-  port_suffix = development? ? ':1111' : ''
-  sfw_host = "#{request.scheme}://#{subdomain}.#{base_host}#{port_suffix}"
+  sfw_host = "#{request.scheme}://#{subdomain}.#{base_host}"
   action_path = "/page/#{slug}/action"
 
   begin
     RestClient.put "#{sfw_host}#{action_path}", :action => create_action_json, :content_type => :json, :accept => :json
   rescue RestClient::Conflict
-    raise 'deal with conflicts'
+    raise 'TODO: deal with conflicts'
   end
 
   redirect "#{sfw_host}/view/#{slug}"
 end
 
-get '/curators' do
-  haml :curators
+get %r{^/curators$} do
+  @viz = :curators
+  @json_path = "http://sfw.#{base_host}/viz/#{@viz}.json"
+  haml @viz
 end
 
 get '/viz/tags.json' do
@@ -145,169 +145,6 @@ get '/viz/curators.json' do
   ~
 end
 
-get '/viz/curators-full.json' do
-  content_type 'application/json'
-  %~
-    {
-      "name":"Open Your Project",
-      "size":"139",
-      "data":{
-        "$dim":77,
-        "$color":"hsl(200,99%,55%)",
-        "json_path":"/network.json"
-      },"children":[
-      {
-        "name":"Tristan Kromer",
-        "size":"139",
-        "data":{
-          "$dim":77,
-          "$color":"hsl(200,99%,88%)",
-          "json_path":"/users/tristan-kromer/network.json"
-        },
-        "children":[
-          {
-            "name":"Tech BA SV",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/tristan-kromer/projects/tech-ba-sv/network.json"
-            }
-          },
-          {
-            "name":"Chicken curry",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/tristan-kromer4/projects/chicken-curry/network.json"
-            }
-          },
-          {
-            "name":"Leading by Design",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/harlan-wood/projects/leading-by-design/network.json"
-            }
-          }
-        ]
-      },
-      {
-        "name":"Harlan T Wood",
-        "size":"139",
-        "data":{
-          "$dim":77,
-          "$color":"hsl(200,99%,88%)",
-          "json_path":"/users/harlan-knight-wood/network.json"
-        },
-        "children":[
-          {
-            "name":"Free Info",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/harlan-knight-wood/projects/free-info/network.json"
-            }
-          },
-          {
-            "name":"Enlightened Structure",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/harlan-knight-wood/projects/enlightened-structure/network.json"
-            }
-          },
-          {
-            "name":"Heart of the Sun",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/harlan-knight-wood/projects/heart-of-the-sun/network.json"
-            }
-          },
-          {
-            "name":"open film genesis",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/harlan-knight-wood/projects/open-film-genesis/network.json"
-            }
-          },
-          {
-            "name":"Superfood Desserts",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/harlan-knight-wood/projects/superfood-desserts/network.json"
-            }
-          }
-        ]
-      },
-      {
-        "name":"Chris Farmer",
-        "size":"139",
-        "data":{
-          "$dim":77,
-          "$color":"hsl(200,99%,88%)",
-          "json_path":"/users/chris-farmer/network.json"
-        },
-        "children":[
-          {
-            "name":"Open Source Cosmology",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/chris-farmer/projects/open-source-cosmology/network.json"
-            }
-          },
-          {
-            "name":"The Sorcerer's Apprentice",
-            "size":"99",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/chris-farmer/projects/open-source-cosmology/network.json"
-            }
-          }
-        ]
-      },
-      {
-        "name":"Bill Ayers",
-        "size":"139",
-        "data":{
-          "$dim":77,
-          "$color":"hsl(200,99%,88%)",
-          "json_path":"/users/bill-ayers/network.json"
-        },
-        "children":[
-          {
-            "name":"Ted's Head",
-            "size":"139",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/bill-ayers/projects/ted-s-head/network.json"
-            }
-          },
-          {
-            "name":"Ted's Head 2",
-            "size":"77",
-            "data":{
-              "$dim":7,
-              "$color":"hsl(50,99%,77%)",
-              "json_path":"/users/bill-ayers/projects/ted-s-head/network.json"
-            }
-          }
-        ]
-      }
-    ]}
-  ~
+def base_host
+  request.host.gsub(/^www\./, '') << ( development? ? ':1111' : '' )
 end
