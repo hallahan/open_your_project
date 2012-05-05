@@ -1,22 +1,22 @@
-var w = 1280,
-    h = 800,
-    r = 720,
-    x = d3.scale.linear().range([0, r]),
-    y = d3.scale.linear().range([0, r]),
-    node,
-    root;
-
-var pack = d3.layout.pack()
-    .size([r, r])
-    .value(function(d) { return d.size; })
-
-var vis = d3.select("#viz-curators-full").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-  .append("svg:g")
-    .attr("transform", "translate(" + (w - r) / 2 + "," + (h - r) / 2 + ")");
-
 d3.json(curators_json_path, function(data) {
+
+  var w = 1280,
+      h = 800,
+      r = 720,
+      x = d3.scale.linear().range([0, r]),
+      y = d3.scale.linear().range([0, r]),
+      node,
+      root;
+
+  var pack = d3.layout.pack()
+      .size([r, r])
+      .value(function(d) { return d.size; })
+
+  var vis = d3.select("#viz-curators-full").append("svg:svg")
+      .attr("width", w)
+      .attr("height", h)
+    .append("svg:g")
+      .attr("transform", "translate(" + (w - r) / 2 + "," + (h - r) / 2 + ")");
 
   node = root = data;
 
@@ -40,7 +40,7 @@ d3.json(curators_json_path, function(data) {
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-      .text(function(d) { return d.name; });
+      .text(function(d) { return d.children ? d.name : ''; });
 
   d3.select(window).on("click", function() { zoom(root); });
 });
