@@ -28,7 +28,8 @@ d3.json("/viz/tags.json", function(json) {
   node.append("circle")
       .attr("r", function(d) { return d.r; });
 
-  node.filter(function(d) { return !d.children; }).append("text")
+  node.filter(function(d) { return !d.children; })
+    .append("text")
       .attr("text-anchor", "middle")
       .attr("dy", ".3em")
       .text(function(d) { return d.name.substring(0, d.r / 3); });
