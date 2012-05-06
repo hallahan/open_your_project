@@ -63,87 +63,42 @@ post '/' do
   redirect "#{sfw_host}/view/#{slug}"
 end
 
-get '/curators' do
-  @viz = :curators
-  @json_path = "http://sfw.#{base_host}/viz/#{@viz}.json"
-  haml @viz
+get %r{^/viz/(\w+)$} do |viz|
+  @viz = viz
+  @json_path = "http://sfw.#{base_host}/viz/#{viz}.json"
+  haml viz.to_sym
 end
 
-get '/viz/tags.json' do
-  content_type 'application/json'
-  %~
-    {
-      "children": [
-        {
-          "name": "Spirituality",
-          "size": "12"
-        },
-        {
-          "name": "Collaboration",
-          "size": "57"
-        },
-        {
-          "name": "Technology",
-          "size": "27"
-        },
-        {
-          "name": "Education",
-          "size": "44"
-        },
-        {
-          "name": "Culture",
-          "size": "29"
-        },
-        {
-          "name": "Arts",
-          "size": "35"
-        },
-        {
-          "name": "Social",
-          "size": "22"
-        }
-      ]
-    }
-  ~
-end
-
-get '/viz/curators.json' do
-  content_type 'application/json'
-  %~
-    {
-      "children": [
-        {
-          "name": "Ward",
-          "size": "431"
-        },
-        {
-          "name": "Bryan",
-          "size": "19"
-        },
-        {
-          "name": "Harlan",
-          "size": "27"
-        },
-        {
-          "name": "Nick",
-          "size": "106"
-        },
-        {
-          "name": "Stephen",
-          "size": "29"
-        },
-        {
-          "name": "Sven",
-          "size": "35"
-        },
-        {
-          "name": "Adam",
-          "size": "22"
-        }
-      ]
-    }
-  ~
-end
+#get '/curators' do
+#  @viz = :curators
+#  @json_path = "http://sfw.#{base_host}/viz/#{@viz}.json"
+#  haml @viz
+#
+#  # Code formerly in SFW around splitting out curators and collections:
+#  #
+#  #
+#  #set :minimum_subdomain_length, 8   # This is our application logic
+#  #set :maximum_subdomain_length, 63  # This is a hard limit set by internet standards
+#  #set :subdomain_pattern, "[a-z0-9][a-z0-9-]{#{settings.minimum_subdomain_length-1},#{settings.maximum_subdomain_length-1}}"
+#  #set :curator_subdomain_pattern,             "(#{settings.subdomain_pattern})"
+#  #set :curator_collection_subdomain_pattern,  "(#{settings.subdomain_pattern})\\.(#{settings.subdomain_pattern})"
+#  #
+#  #
+#  #curators_hashes = []
+#  #curators = {"name" => "", "children" => curators_hashes}
+#  #
+#  #for each page obj:
+#  #  next unless page['site'] && page['site'].match(/^#{settings.curator_collection_subdomain_pattern}\./)
+#  #
+#  #  collection_subdomain, curator_subdomain = $1, $2
+#  #
+#  #  curator_hash = curators_hashes.find{ |curator_hash| curator_hash['name'] == curator_subdomain }
+#  #  unless curator_hash
+#  #    curator_hash = {"name" => curator_subdomain, "children" => []}
+#  #    curators_hashes << curator_hash
+#  #  end
+#
+#end
 
 def base_host
   request.host.gsub(/^www\./, '') << ( development? ? ':1111' : '' )

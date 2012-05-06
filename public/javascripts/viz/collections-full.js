@@ -1,4 +1,4 @@
-d3.json(curators_json_path, function(data) {
+d3.json(collections_json_path, function(data) {
 
   var w = 800,
       h = 800,
@@ -12,7 +12,7 @@ d3.json(curators_json_path, function(data) {
       .size([r, r])
       .value(function(d) { return d.size; })
 
-  var vis = d3.select("#viz-curators-full").append("svg:svg")
+  var vis = d3.select("#viz-collections-full").append("svg:svg")
       .attr("width", w)
       .attr("height", h)
     .append("svg:g")
@@ -40,7 +40,7 @@ d3.json(curators_json_path, function(data) {
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .style("opacity", function(d) { return 1; })
-      .text(function(d) { return d.children ? d.name : ''; });
+      .text(function(d) { return d.children ? d.name.substring(0, d.r / 3) : ''; });
 
   d3.select(window).on("click", function() { zoom(root); });
 

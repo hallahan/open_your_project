@@ -10,7 +10,7 @@ text.parent {
 circle {
   fill: #ccc;
   fill-opacity: 0;
-  stroke: #999;
+  stroke: #ccc;
   pointer-events: all;
 }
 
