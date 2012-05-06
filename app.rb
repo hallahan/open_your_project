@@ -63,7 +63,7 @@ post '/' do
   redirect "#{sfw_host}/view/#{slug}"
 end
 
-get %r{^/curators$} do
+get '/curators' do
   @viz = :curators
   @json_path = "http://sfw.#{base_host}/viz/#{@viz}.json"
   haml @viz
