@@ -11,7 +11,12 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.8)
+    anemone (0.7.1)
+      nokogiri (>= 1.3.0)
+      robotex (>= 1.0.0)
     awesome_print (1.0.2)
+    chronic (0.6.7)
+    fast-stemmer (1.0.1)
     haml (3.1.4)
     heroku (2.25.0)
       launchy (>= 0.3.2)
@@ -24,16 +29,29 @@ GEM
     mime-types (1.18)
     netrc (0.7.1)
     nokogiri (1.4.7)
+    pismo (0.7.2)
+      awesome_print
+      chronic
+      fast-stemmer
+      nokogiri
+      sanitize
+      shoulda
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    robotex (1.0.0)
     rubyzip (0.9.8)
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
     shotgun (0.9)
       rack (>= 1.0)
+    shoulda (3.0.1)
+      shoulda-context (~> 1.0.0)
+      shoulda-matchers (~> 1.0.0)
+    shoulda-context (1.0.0)
+    shoulda-matchers (1.0.0)
     sinatra (1.3.2)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
@@ -44,12 +62,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  anemone
   awesome_print
   haml
   heroku
   html_massage!
   json
   nokogiri
+  pismo
   rest-client
   shotgun
   sinatra

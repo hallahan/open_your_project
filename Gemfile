@@ -8,8 +8,10 @@ gem "rest-client"
 gem 'sinatra'
 
 group :development do
+  gem 'anemone'
   gem 'awesome_print'
   gem 'heroku'
   gem 'shotgun'
+  gem 'pismo'
 end
 
