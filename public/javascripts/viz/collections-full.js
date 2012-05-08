@@ -30,6 +30,7 @@ d3.json(collections_json_path, function(data) {
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d) { return d.r; })
       .on("click", function(d) { return zoom(node == d ? root : d); });
+//      .on("click", function(d) { return ( (node == d && !d.children) ? (window.location = d.name) : zoom(d) ); });
 
   vis.selectAll("text")
       .data(nodes)
