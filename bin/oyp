@@ -64,7 +64,7 @@ def crawl(starting_url)
         url_chunks = url.match(%r{
           ^
           https?://
-          (www\.)?
+          (?: www\.)?
           (#{SUBDOMAIN_PATTERN})
           ((?:\.#{SUBDOMAIN_PATTERN})+)
           (/.*)
