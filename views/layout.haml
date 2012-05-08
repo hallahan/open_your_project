@@ -30,7 +30,7 @@
     %hgroup
       %h1
         %a{:href => "/"} Open Your Project
-      %h2 Creative collaboration for social change projects
+      %h2 Collaborative sharing for social change projects
   %nav{:role => "navigation"}
     %form{:action => "http://google.com/search", :method => "get"}
       %fieldset{:role => "search"}
@@ -38,7 +38,9 @@
         %input.search{:name => "q", :placeholder => "Search", :results => "0", :type => "text"}/
     %ul.main-navigation
       %li
-        -#%a{:href => "/"} Home
+        %a{:href => "/"} Home
+      %li
+        %a{:href => "/viz/collections"} Collections
   #main
     #content
       %div
@@ -77,16 +79,14 @@
     Creative Commons.
     &nbsp; &nbsp;
 
-    A
-    %a{:href => 'http://enlightenedstructure.org/Software_Zero/'} Software Zero
+    An
+    %a{:href => 'http://enlightenedstructure.org/Software_Zero/'} Enlightened Structure Software Zero
     project,
 
     powered by
     = succeed "," do
-      %a{:href => 'http://wardcunningham.github.com/'} Smallest Federated Wiki
+      %a{:href => 'http://fed.wiki.org/view/welcome-visitors/view/smallest-federated-wiki'} Smallest Federated Wiki
 
     responsive design by
     = succeed "." do
-      %a{:href => "http://octopress.org"} Octopress.
-    &nbsp;
-
+      %a{:href => "http://octopress.org"} Octopress

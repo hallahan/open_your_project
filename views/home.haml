@@ -1,7 +1,7 @@
 %ul.overview
   %li
     &raquo;
-    Open any Creative Commons licensed project
+    Transfer any Creative Commons licensed project
     into an open wiki collaboration framework
   %li
     &raquo;
@@ -9,13 +9,13 @@
     contribute ideas and suggest improvements
   %li
     &raquo;
-    The project is an idea seed, giving birth
+    The project acts an idea seed, giving birth
     to trees of remixes, spreading through
     communities and trust networks
 
 .open
   .action
-    Enter a project website
+    Enter a project URL
   %div
     %form{:method => 'post', :action => "/"}
       %div
@@ -23,7 +23,7 @@
       %div
         %input{:type => 'text', :name => 'username', :class => "", :placeholder => 'Your name', :value => ('John Q. Public' if development?)}
       %div
-        %input{:type => 'text', :name => 'topic', :class => "", :placeholder => 'Topic', :value => ('Enlightened Structure' if development?)}
+        %input{:type => 'text', :name => 'topic', :class => "", :placeholder => 'Topic: help categorize this content for yourself and others', :value => ('Enlightened Structure' if development?)}
       %div
         %input{:type => 'submit', :value => 'Open Now', :class => 'big'}
       %div
