@@ -46,6 +46,7 @@ d3.json(collections_json_path, function(data) {
 
   function zoom(d, i) {
     var k = r / d.r / 2;
+    var zoomed = k > 1;
     x.domain([d.x - d.r, d.x + d.r]);
     y.domain([d.y - d.r, d.y + d.r]);
 
@@ -60,8 +61,8 @@ d3.json(collections_json_path, function(data) {
     t.selectAll("text")
         .attr("x", function(d) { return x(d.x); })
         .attr("y", function(d) { return y(d.y); })
-        .style("opacity", function(d) { return d.children ? 0 : 1; })
-        .text(function(d) { return d.name.substring(0, k*d.r / 3); });
+        .style("opacity", function(d) { return (d.children && !zoomed || !d.children && zoomed) ? 1 : 0; })
+        .text(function(d) { return d.name? d.name.substring(0, k*d.r / 3) : ''; });
 
     node = d;
     d3.event.stopPropagation();
