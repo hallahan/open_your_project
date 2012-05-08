@@ -42,7 +42,6 @@ post '/' do
 
   create_action = {
     'type' => 'create',
-    'id' => RandomId.generate,
     'item' => sfw_page_data
   }
   create_action_json = JSON.pretty_generate(create_action)
