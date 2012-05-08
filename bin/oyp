@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 #
 #  Usage:
-#    ./bin/oyp http://emergentbydesign.com/
+#    bundle exec bin/oyp [url to crawl]
+#
 
 require 'anemone'
 require 'html_massage'
@@ -14,6 +15,83 @@ require 'ruby_extensions/string'
 require 'sfw/random_id'
 
 SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{1,63}" # subdomains max at 63 characters
+MAX_LINKS_PER_SITE = 10
+
+def crawl(starting_url)
+  Anemone.crawl(starting_url) do |anemone|
+    anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
+    anemone.on_every_page do |page|
+      puts '~'*20
+      sleep rand*4
+      doc = page.doc
+      url = page.url.to_s
+      html = doc.to_s
+
+      meta = Pismo::Document.new(url) rescue nil # for a list of metadata properties, see https://github.com/peterc/pismo
+                                                 # To get the 12 sectors, or the P&C categories:
+                                                 #   New! The keywords method accepts optional arguments. These are the current defaults:
+                                                 #   :stem_at => 20, :word_length_limit => 15, :limit => 20, :remove_stopwords => true, :minimum_score => 2
+                                                 #   You can also pass an array to keywords with :hints => arr if you want only words of your choosing to be found.
+
+      unless html.empty? || !meta || url =~ /%23/
+
+        puts url
+
+        sfw_page_data = {
+          'title' => meta.title,
+          'keywords' => meta.keywords.map(&:first),
+          'story' => [],
+        }
+
+        sfw_page_data.merge! 'updated_at' => meta.datetime.utc.iso8601 if meta.datetime rescue nil
+
+        ap sfw_page_data
+
+        begin
+          text = HtmlMassage.text html
+          chunks = text.split(/\n{2,}/)
+          chunks.each do |chunk|
+            sfw_page_data['story'] << ({
+              'type' => 'paragraph',
+              'id' => RandomId.generate,
+              'text' => chunk
+            })
+          end
+        rescue Encoding::CompatibilityError
+          next   # TODO: manage this inside the html_massage gem!
+        end
+
+        url_chunks = url.match(%r{
+          ^
+          https?://
+          (www\.)?
+          (#{SUBDOMAIN_PATTERN})
+          ((?:\.#{SUBDOMAIN_PATTERN})+)
+          (/.*)
+          $
+        }x).to_a
+
+        url_chunks.shift # discard full regexp match
+        path = url_chunks.pop
+        origin_domain = url_chunks.join
+
+        sfw_base_domain = 'openyourproject.org'
+        #sfw_base_domain = 'lvh.me:1111'
+
+         slug = path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
+        slug = 'home' if slug.empty?
+        puts sfw_action_url = "http://#{origin_domain}.on.#{sfw_base_domain}/page/#{slug}/action"
+
+        begin
+          sfw_do(sfw_action_url, :create, sfw_page_data)
+        rescue RestClient::Conflict
+          sfw_do(sfw_action_url, :merge, sfw_page_data)
+        end
+
+      end
+    end
+  end
+end
 
 def run(cmd)
   cmd.gsub! /\s+/, ' '
@@ -22,78 +100,20 @@ def run(cmd)
   system cmd
 end
 
-starting_url = ARGV.first
-starting_url = starting_url =~ %r{^https?://} ? starting_url : "http://#{starting_url}"
-
 def sfw_do(sfw_action_url, action, sfw_page_data)
   action_json = JSON.pretty_generate 'type' => action, 'item' => sfw_page_data
   RestClient.put "#{sfw_action_url}", :action => action_json, :content_type => :json, :accept => :json
 end
 
-Anemone.crawl(starting_url) do |anemone|
-  anemone.focus_crawl { |page| page.links.slice(0...49) }
-  anemone.on_every_page do |page|
-    puts '~'*20
-    sleep rand*4
-    doc = page.doc
-    url = page.url.to_s
-    html = doc.to_s
-    puts url
+### The action: read args and crawl --
 
-    meta = Pismo::Document.new(url) rescue nil  # for a list of metadata properties, see https://github.com/peterc/pismo
-    # To get the 12 sectors, or the P&C categories:
-    #   New! The keywords method accepts optional arguments. These are the current defaults:
-    #   :stem_at => 20, :word_length_limit => 15, :limit => 20, :remove_stopwords => true, :minimum_score => 2
-    #   You can also pass an array to keywords with :hints => arr if you want only words of your choosing to be found.
-
-    unless html.empty? || !meta || url =~ /%23/
-
-      sfw_page_data = {
-        'title' => meta.title,
-        'keywords' => meta.keywords.map(&:first),
-        'story' => [],
-      }
-      sfw_page_data.merge! 'updated_at' => meta.datetime.utc.iso8601 if meta.datetime
-      ap sfw_page_data
-
-      text = HtmlMassage.text html
-      chunks = text.split(/\n{2,}/)
-      chunks.each do |chunk|
-        sfw_page_data['story'] << ({
-          'type' => 'paragraph',
-          'id' => RandomId.generate,
-          'text' => chunk
-        })
-      end
-
-      url_chunks = url.match(%r{
-        ^
-        https?://
-        (www\.)?
-        (#{SUBDOMAIN_PATTERN})
-        ((?:\.#{SUBDOMAIN_PATTERN})+)
-        (/.*)
-        $
-      }x).to_a
-
-      url_chunks.shift # discard full regexp match
-      path = url_chunks.pop
-      origin_domain = url_chunks.join
-
-      sfw_base_domain = 'openyourproject.org'
-      #sfw_base_domain = 'lvh.me:1111'
-
-      slug = path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
-      slug = 'home' if slug.empty?
-      puts sfw_action_url = "http://#{origin_domain}.on.#{sfw_base_domain}/page/#{slug}/action"
-
-      begin
-        sfw_do(sfw_action_url, :create, sfw_page_data)
-      rescue RestClient::Conflict
-        sfw_do(sfw_action_url, :merge, sfw_page_data)
-      end
-
-    end
+url = ARGV.first
+if url
+  url = url =~ %r{^https?://} ? url : "http://#{url}"
+  crawl url
+else
+  File.readlines('links.txt').each do |line|
+    p url = line.strip
+    crawl url
   end
 end
-
