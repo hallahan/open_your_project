@@ -1,7 +1,15 @@
 #!/usr/bin/env ruby
 #
 #  Usage:
+#    export SFW_BASE_DOMAIN=my-fed-wiki-farm.org
 #    bundle exec bin/oyp [url to crawl]
+#
+#  For local development, try spinning up a SFW on port 1111, then:
+#    export SFW_BASE_DOMAIN=lvh.me:1111
+#    bundle exec bin/oyp [url to crawl]
+#
+#  If no "url to crawl" is given, we look for a local file called 'links.txt' and crawl each link in turn
+#  For a test URL, try http://en.wikipedia.org/wiki/Special:Random
 #
 
 require 'anemone'
@@ -15,27 +23,28 @@ require 'ruby_extensions/string'
 require 'sfw/random_id'
 
 SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{1,63}" # subdomains max at 63 characters
-MAX_LINKS_PER_SITE = 10
+MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
 
 def crawl(starting_url)
   Anemone.crawl(starting_url) do |anemone|
     anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
     anemone.on_every_page do |page|
-      puts '~'*20
+      #puts '~'*20
       sleep rand*4
       doc = page.doc
       url = page.url.to_s
       html = doc.to_s
 
-      meta = Pismo::Document.new(url) rescue nil # for a list of metadata properties, see https://github.com/peterc/pismo
-                                                 # To get the 12 sectors, or the P&C categories:
-                                                 #   New! The keywords method accepts optional arguments. These are the current defaults:
-                                                 #   :stem_at => 20, :word_length_limit => 15, :limit => 20, :remove_stopwords => true, :minimum_score => 2
-                                                 #   You can also pass an array to keywords with :hints => arr if you want only words of your choosing to be found.
+      meta = Pismo::Document.new(html) # rescue nil
+      # for a list of metadata properties, see https://github.com/peterc/pismo
+      # To limit keywords to specific items we care about, consider this doc fragment --
+      #   New! The keywords method accepts optional arguments. These are the current defaults:
+      #   :stem_at => 20, :word_length_limit => 15, :limit => 20, :remove_stopwords => true, :minimum_score => 2
+      #   You can also pass an array to keywords with :hints => arr if you want only words of your choosing to be found.
 
       unless html.empty? || !meta || url =~ /%23/
 
-        puts url
+        #puts url
 
         sfw_page_data = {
           'title' => meta.title,
@@ -43,9 +52,11 @@ def crawl(starting_url)
           'story' => [],
         }
 
-        sfw_page_data.merge! 'updated_at' => meta.datetime.utc.iso8601 if meta.datetime rescue nil
+        # Two ways to check the last updated time, both unsatisfactory...
+        # sfw_page_data.merge! 'updated_at' => page.headers['Last-Modified']
+        # sfw_page_data.merge! 'updated_at' => meta.datetime.utc.iso8601 if meta.datetime rescue nil
 
-        ap sfw_page_data
+        #ap sfw_page_data
 
         begin
           text = HtmlMassage.text html
@@ -75,12 +86,9 @@ def crawl(starting_url)
         path = url_chunks.pop
         origin_domain = url_chunks.join
 
-        sfw_base_domain = 'openyourproject.org'
-        #sfw_base_domain = 'lvh.me:1111'
-
-         slug = path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
+        slug = path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
         slug = 'home' if slug.empty?
-        puts sfw_action_url = "http://#{origin_domain}.on.#{sfw_base_domain}/page/#{slug}/action"
+        sfw_action_url = "http://#{origin_domain}.on.#{ENV['SFW_BASE_DOMAIN']}/page/#{slug}/action"
 
         begin
           sfw_do(sfw_action_url, :create, sfw_page_data)
@@ -88,6 +96,8 @@ def crawl(starting_url)
           sfw_do(sfw_action_url, :merge, sfw_page_data)
         end
 
+        puts "Created fedwiki page -->"
+        puts "http://#{origin_domain}.on.#{ENV['SFW_BASE_DOMAIN']}/view/#{slug}"
       end
     end
   end
@@ -107,6 +117,11 @@ end
 
 ### The action: read args and crawl --
 
+unless ENV['SFW_BASE_DOMAIN']
+  puts "Please set the environment variable 'SFW_BASE_DOMAIN'"
+  exit 1
+end
+
 url = ARGV.first
 if url
   url = url =~ %r{^https?://} ? url : "http://#{url}"
@@ -114,6 +129,6 @@ if url
 else
   File.readlines('links.txt').each do |line|
     p url = line.strip
-    crawl url
+    crawl url unless url.empty?
   end
 end
