@@ -1,30 +1,32 @@
+circle {
+  /*fill: rgb(31, 119, 180);*/
+  fill-opacity: .25;
+  /*stroke: rgb(31, 119, 180);*/
+  stroke-width: 1px;
+  /*fill: #ccc;*/
+  /*stroke: #ccc;*/
+  fill: #1f77b4;
+  /*fill-opacity: .1;*/
+  stroke: steelblue;
+}
+
+/*.leaf circle {*/
+  /*fill: #ff7f0e;*/
+  /*fill-opacity: 1;*/
+/*}*/
+
 text {
-  font-size: 11px;
-  pointer-events: none;
+  font: 10px sans-serif;
 }
 
 text.parent {
   fill: #1f77b4;
 }
 
-circle {
-  fill: #ccc;
-  fill-opacity: 0;
-  stroke: #ccc;
-  pointer-events: all;
-}
-
 circle.parent {
-  fill: #1f77b4;
-  fill-opacity: .1;
-  stroke: steelblue;
 }
 
-circle.parent:hover {
+circle:hover {
   stroke: #ff7f0e;
   stroke-width: .5px;
 }
-
-/*circle.child {*/
-  /*pointer-events: none;*/
-/*}*/
