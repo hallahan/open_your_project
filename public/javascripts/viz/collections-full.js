@@ -27,7 +27,7 @@ d3.json(collections_json_path, function(data) {
   node.append("circle")
       .attr("r", function(d) { return d.r; });
 
-  node.filter(function(d) { return !d.children; })
+  node.filter(function(d) { return d.children; })
     .append("text")
       .attr("text-anchor", "middle")
       .attr("dy", ".3em")

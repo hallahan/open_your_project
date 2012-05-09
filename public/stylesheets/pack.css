@@ -10,13 +10,17 @@ circle {
   stroke: steelblue;
 }
 
-/*.leaf circle {*/
-  /*fill: #ff7f0e;*/
-  /*fill-opacity: 1;*/
-/*}*/
+.leaf circle {
+  fill-opacity: 0;
+  /*stroke: steelblue;*/
+}
 
 text {
-  font: 10px sans-serif;
+  font: 11px sans-serif;
+}
+
+.leaf text {
+  opacity: 0;
 }
 
 text.parent {
