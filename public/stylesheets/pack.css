@@ -12,7 +12,7 @@ circle {
 
 .leaf circle {
   fill-opacity: 0;
-  /*stroke: steelblue;*/
+  pointer-events: none;
 }
 
 text {

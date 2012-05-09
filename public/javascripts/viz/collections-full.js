@@ -25,7 +25,8 @@ d3.json(collections_json_path, function(data) {
       .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
 
   node.append("circle")
-      .attr("r", function(d) { return d.r; });
+      .attr("r", function(d) { return d.r; })
+      .on("click", function(d) { return (d.children ? (window.location = d.url) : void(0)); });
 
   node.filter(function(d) { return d.children; })
     .append("text")
