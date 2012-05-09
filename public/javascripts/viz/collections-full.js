@@ -29,8 +29,7 @@ d3.json(collections_json_path, function(data) {
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d) { return d.r; })
-      .on("click", function(d) { return zoom(node == d ? root : d); });
-//      .on("click", function(d) { return ( (node == d && !d.children) ? (window.location = d.name) : zoom(d) ); });
+      .on("click", function(d) { return zoom_or_navigate(d); });
 
   vis.selectAll("text")
       .data(nodes)
@@ -44,6 +43,28 @@ d3.json(collections_json_path, function(data) {
       .text(function(d) { return d.children ? d.name.substring(0, d.r / 3) : ''; });
 
   d3.select(window).on("click", function() { zoom(root); });
+
+  function zoom_or_navigate(d) {
+    var xx = (node == d) ? root : d;
+    var k = r / xx.r / 2;
+    var zoomed = k > 1;
+
+    console.log(k);
+    console.log(zoomed);
+    console.log('---');
+
+    var leaf = !d.children;
+
+    if (leaf && zoomed) {
+      return (window.location = d.name);
+    }
+    else if (leaf && !zoomed) {
+      return null;
+    }
+    else {
+      return zoom(node == d ? root : d);
+    }
+  }
 
   function zoom(d, i) {
     var k = r / d.r / 2;
