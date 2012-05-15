@@ -1,10 +1,12 @@
 source 'http://rubygems.org'
 
+gem 'active_support'
 gem 'haml'
 gem 'html_massage', :git => 'git://github.com/harlantwood/html_massage.git' #, :path => '~/HKB/code/mine/html_massage'
-gem "json"
-gem "nokogiri"
-gem "rest-client"
+gem 'i18n'
+gem 'json'
+gem 'nokogiri'
+gem 'rest-client'
 gem 'sinatra'
 gem 'thin'
 

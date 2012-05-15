@@ -13,17 +13,15 @@
 #
 
 require 'anemone'
-require 'html_massage'
 require 'json'
-require 'pismo'
-require 'rest_client'
 
 $LOAD_PATH.unshift(File.expand_path('../lib', (File.dirname(__FILE__))))
 require 'ruby_extensions/string'
 require 'sfw/random_id'
 require 'forkdiffmerge/fork'
 
-SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{1,62}" # subdomains max at 63 characters
+include ForkDiffMerge
+
 MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
 
 def crawl(starting_url)
@@ -34,21 +32,11 @@ def crawl(starting_url)
       sleep rand*16   # Note: Anemone runs 4 threads by default
       doc = page.doc
       url = page.url.to_s
-      fork_content doc, url
+      fork_url = fork_to_sfw doc, url
+      puts "Created fedwiki page -->"
+      puts fork_url
     end
   end
-end
-
-def run(cmd)
-  cmd.gsub! /\s+/, ' '
-  cmd.strip!
-  puts "Running => #{cmd.inspect}"
-  system cmd
-end
-
-def sfw_do(sfw_action_url, action, sfw_page_data)
-  action_json = JSON.pretty_generate 'type' => action, 'item' => sfw_page_data
-  RestClient.put "#{sfw_action_url}", :action => action_json, :content_type => :json, :accept => :json
 end
 
 ### The action: read args and crawl --
@@ -64,7 +52,7 @@ if url
   crawl url
 else
   File.readlines('links.txt').each do |line|
-    p url = line.strip
+    url = line.strip
     crawl url unless url.empty?
   end
 end

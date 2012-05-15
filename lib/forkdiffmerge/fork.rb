@@ -1,6 +1,13 @@
+require 'pismo'
+require 'html_massage'
+require 'rest_client'
+
 module ForkDiffMerge
 
-  def fork_content(doc, url)
+  SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{0,62}" # subdomains max at 63 characters
+
+  def fork_to_sfw(doc, url, options={})
+
     html = doc.to_s
 
     metadata = Pismo::Document.new(html) # rescue nil
@@ -29,15 +36,15 @@ module ForkDiffMerge
     #ap sfw_page_data
 
     begin
-      text = HtmlMassage.text html
-      chunks = text.split(/\n{2,}/)
-      chunks.each do |chunk|
-        sfw_page_data['story'] << ({
-          'type' => 'paragraph',
-          'id' => RandomId.generate,
-          'text' => chunk
-        })
-      end
+    text = HtmlMassage.text html
+    chunks = text.split(/\n{2,}/)
+    chunks.each do |chunk|
+      sfw_page_data['story'] << ({
+        'type' => 'paragraph',
+        'id' => RandomId.generate,
+        'text' => chunk
+      })
+    end
     rescue Encoding::CompatibilityError
       return   # TODO: manage this inside the html_massage gem!
     end
@@ -45,33 +52,44 @@ module ForkDiffMerge
     url_chunks = url.match(%r{
       ^
       https?://
-      (?: www\.)?
+      (?:www\.)?
       (#{SUBDOMAIN_PATTERN})
       ((?:\.#{SUBDOMAIN_PATTERN})+)
       (?::\d+)?
       (/.*)
       $
     }x).to_a
-
     url_chunks.shift # discard full regexp match
     path = url_chunks.pop
-    origin_domain = url_chunks.join
+    slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
 
-    slug = path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
-    slug = 'home' if slug.empty?
-    sfw_action_url = "http://#{origin_domain}.on.#{ENV['SFW_BASE_DOMAIN']}/page/#{slug}/action"
+    p 222, options
+    if options[:username]
+      topic = options[:topic].parameterize if options[:topic] || url_chunks.first  # url.gsub(%r{^https?://(www\.)?}, '').split('.').first
+      username = options[:username].parameterize
+      subdomain = "#{topic}.#{username}"
+    else
+      # oyp
+      origin_domain = url_chunks.join
+      subdomain = "#{origin_domain}.on"
+    end
+
+    sfw_site = "#{subdomain}.#{ENV['SFW_BASE_DOMAIN']}"
+    sfw_action_url = "http://#{sfw_site}/page/#{slug}/action"
 
     begin
       sfw_do(sfw_action_url, :create, sfw_page_data)
     rescue RestClient::Conflict
-      sfw_do(sfw_action_url, :merge, sfw_page_data)
+      sfw_do(sfw_action_url, :update, sfw_page_data)
     end
 
-    puts "Created fedwiki page -->"
-    puts "http://#{origin_domain}.on.#{ENV['SFW_BASE_DOMAIN']}/view/#{slug}"
+    fork_url = "http://#{sfw_site}/view/#{slug}"
+  end
+
+  def sfw_do(sfw_action_url, action, sfw_page_data)
+    action_json = JSON.pretty_generate 'type' => action, 'item' => sfw_page_data
+    RestClient.put "#{sfw_action_url}", :action => action_json, :content_type => :json, :accept => :json
   end
 
 end
-
-include ForkDiffMerge
 
