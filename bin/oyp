@@ -4,7 +4,7 @@
 #    export SFW_BASE_DOMAIN=my-fed-wiki-farm.org
 #    bundle exec bin/oyp [url to crawl]
 #
-#  For local development, try spinning up a SFW on port 1111, then:
+#  For local development, try spinning up a SFW (running in farm mode) on port 1111, then:
 #    export SFW_BASE_DOMAIN=lvh.me:1111
 #    bundle exec bin/oyp [url to crawl]
 #
@@ -23,9 +23,9 @@ require 'ruby_extensions/string'
 require 'sfw/random_id'
 require 'forkdiffmerge/fork'
 
-SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{1,63}" # subdomains max at 63 characters
 include ForkDiffMerge
 
+SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{1,62}" # subdomains max at 63 characters
 MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
 
 def crawl(starting_url)
@@ -33,7 +33,7 @@ def crawl(starting_url)
     anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
     anemone.on_every_page do |page|
       #puts '~'*20
-      sleep rand*4
+      sleep rand*16   # Note: Anemone runs 4 threads by default
       doc = page.doc
       url = page.url.to_s
       fork_content doc, url
