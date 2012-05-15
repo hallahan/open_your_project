@@ -72,3 +72,6 @@ module ForkDiffMerge
   end
 
 end
+
+include ForkDiffMerge
+

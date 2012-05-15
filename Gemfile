@@ -6,12 +6,14 @@ gem "json"
 gem "nokogiri"
 gem "rest-client"
 gem 'sinatra'
+gem 'thin'
 
 group :development do
   gem 'anemone'
   gem 'awesome_print'
   gem 'heroku'
-  gem 'shotgun'
+  gem 'rerun'
+  gem 'foreman'
   gem 'pismo'
 end
 
