@@ -78,8 +78,6 @@ module FedWiki
         link['data-page-name'] = link_slug
         link['class'] = (link['class'] && !link['class'].empty?) ? "#{link['class']} internal" : 'internal'
         link['title'] = "origin => #{sfw_site}"
-        link['title'] = "origin => #{sfw_site}"
-        #title="origin =&gt; enlightenedstructure.org.on.openyourproject.org"
       end
     end
     html = doc.to_html
