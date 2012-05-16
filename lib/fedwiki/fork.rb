@@ -55,8 +55,8 @@ module FedWiki
       (?:www\.)?
       (#{SUBDOMAIN_PATTERN})
       ((?:\.#{SUBDOMAIN_PATTERN})+)
-      (?::\d+)?
-      (/.*)
+      (?::\d+)?  # port
+      (/.*)      # path
       $
     }x).to_a
     url_chunks.shift # discard full regexp match
@@ -65,7 +65,7 @@ module FedWiki
 
     if options[:username]
       username = options[:username].parameterize
-      topic = options[:topic].parameterize if options[:topic] || url_chunks.first # url.gsub(%r{^https?://(www\.)?}, '').split('.').first
+      topic = options[:topic].empty? ? url_chunks.first : options[:topic].parameterize
       subdomain = "#{topic}.#{username}"
     else
       origin_domain = url_chunks.join
