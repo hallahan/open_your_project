@@ -58,6 +58,17 @@ module FedWiki
     slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
     origin_domain = url_chunks.join
 
+    if options[:username]
+      username = options[:username].parameterize
+      topic = options[:topic].empty? ? url_chunks.first : options[:topic].parameterize
+      subdomain = "#{topic}.#{username}"
+    else
+      subdomain = "#{origin_domain}.on"
+    end
+
+    sfw_site = "#{subdomain}.#{ENV['SFW_BASE_DOMAIN']}"
+    sfw_action_url = "http://#{sfw_site}/page/#{slug}/action"
+
     doc = Nokogiri::HTML.fragment(html)
     links = doc / 'a'
     links.each do |link|
@@ -66,7 +77,9 @@ module FedWiki
         link['href'] = "/#{link_slug}.html"
         link['data-page-name'] = link_slug
         link['class'] = (link['class'] && !link['class'].empty?) ? "#{link['class']} internal" : 'internal'
-        link['title'] = "origin"
+        link['title'] = "origin => #{sfw_site}"
+        link['title'] = "origin => #{sfw_site}"
+        #title="origin =&gt; enlightenedstructure.org.on.openyourproject.org"
       end
     end
     html = doc.to_html
@@ -80,17 +93,6 @@ module FedWiki
         'text' => chunk
       })
     end
-
-    if options[:username]
-      username = options[:username].parameterize
-      topic = options[:topic].empty? ? url_chunks.first : options[:topic].parameterize
-      subdomain = "#{topic}.#{username}"
-    else
-      subdomain = "#{origin_domain}.on"
-    end
-
-    sfw_site = "#{subdomain}.#{ENV['SFW_BASE_DOMAIN']}"
-    sfw_action_url = "http://#{sfw_site}/page/#{slug}/action"
 
     begin
       sfw_do(sfw_action_url, :create, sfw_page_data)
