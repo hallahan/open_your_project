@@ -36,39 +36,56 @@ module FedWiki
     #ap sfw_page_data
 
     begin
-      text = HtmlMassage.html html
-      chunks = text.split(/\n{2,}/)
-      chunks.each do |chunk|
-        sfw_page_data['story'] << ({
-          'type' => 'paragraph',
-          'id' => RandomId.generate,
-          'text' => chunk
-        })
-      end
+      html = HtmlMassage.html html, :source_url => url, :links => :absolute
     rescue Encoding::CompatibilityError
       return # TODO: manage this inside the html_massage gem!
     end
 
+    #p 444, url
     url_chunks = url.match(%r{
       ^
       https?://
       (?:www\.)?
       (#{SUBDOMAIN_PATTERN})
-      ((?:\.#{SUBDOMAIN_PATTERN})+)
+      ((?:\.#{SUBDOMAIN_PATTERN})+)?
       (?::\d+)?  # port
       (/.*)      # path
       $
     }x).to_a
     url_chunks.shift # discard full regexp match
+    #p 333, url_chunks
     path = url_chunks.pop
     slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
+    origin_domain = url_chunks.join
+
+    doc = Nokogiri::HTML.fragment(html)
+    links = doc / 'a'
+    links.each do |link|
+      if match = link['href'].to_s.match(%r[.+?#{origin_domain}(?::\d+)?(?<href_path>/.*)$])
+        link_slug = match['href_path'].parameterize
+        link['href'] = "/#{link_slug}.html"
+        link['data-page-name'] = link_slug
+        link['class'] = (link['class'] && !link['class'].empty?) ? "#{link['class']} internal" : 'internal'
+        link['title'] = "origin"
+      end
+    end
+    html = doc.to_html
+
+    #html.rstrip_lines!
+    chunks = html.split(/\n{2,}/)
+    chunks.each do |chunk|
+      sfw_page_data['story'] << ({
+        'type' => 'paragraph',
+        'id' => RandomId.generate,
+        'text' => chunk
+      })
+    end
 
     if options[:username]
       username = options[:username].parameterize
       topic = options[:topic].empty? ? url_chunks.first : options[:topic].parameterize
       subdomain = "#{topic}.#{username}"
     else
-      origin_domain = url_chunks.join
       subdomain = "#{origin_domain}.on"
     end
 
