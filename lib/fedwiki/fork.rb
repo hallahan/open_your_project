@@ -63,13 +63,11 @@ module FedWiki
     path = url_chunks.pop
     slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
 
-    p 222, options
     if options[:username]
-      topic = options[:topic].parameterize if options[:topic] || url_chunks.first # url.gsub(%r{^https?://(www\.)?}, '').split('.').first
       username = options[:username].parameterize
+      topic = options[:topic].parameterize if options[:topic] || url_chunks.first # url.gsub(%r{^https?://(www\.)?}, '').split('.').first
       subdomain = "#{topic}.#{username}"
     else
-      # oyp
       origin_domain = url_chunks.join
       subdomain = "#{origin_domain}.on"
     end
