@@ -6,6 +6,7 @@ gem 'html_massage', :git => 'git://github.com/harlantwood/html_massage.git' #, :
 gem 'i18n'
 gem 'json'
 gem 'nokogiri'
+gem 'pismo'
 gem 'rest-client'
 gem 'sinatra'
 gem 'thin'
@@ -16,6 +17,5 @@ group :development do
   gem 'heroku'
   gem 'rerun'
   gem 'foreman'
-  gem 'pismo'
 end
 
