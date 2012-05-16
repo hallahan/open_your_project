@@ -7,7 +7,7 @@ require 'sinatra'
 
 Dir[File.expand_path("lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
 
-include ForkDiffMerge
+include FedWiki
 
 enable :logging, :dump_errors, :raise_errors
 set :show_exceptions, true if development?
@@ -30,7 +30,7 @@ post '/' do
   html = RestClient.get url
   doc = Nokogiri::HTML(html)
   options = params.symbolize_keys.slice(:username, :topic)
-  fork_url = fork_to_sfw doc, url, options
+  fork_url = fedwiki_fork doc, url, options
   redirect fork_url
 end
 

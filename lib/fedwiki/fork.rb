@@ -2,22 +2,22 @@ require 'pismo'
 require 'html_massage'
 require 'rest_client'
 
-module ForkDiffMerge
+module FedWiki
 
   SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{0,62}" # subdomains max at 63 characters
 
-  def fork_to_sfw(doc, url, options={})
+  def fedwiki_fork(doc, url, options={})
 
     html = doc.to_s
 
     metadata = Pismo::Document.new(html) # rescue nil
-    # for a list of metadata properties, see https://github.com/peterc/pismo
-    # To limit keywords to specific items we care about, consider this doc fragment --
-    #   New! The keywords method accepts optional arguments. These are the current defaults:
-    #   :stem_at => 20, :word_length_limit => 15, :limit => 20, :remove_stopwords => true, :minimum_score => 2
-    #   You can also pass an array to keywords with :hints => arr if you want only words of your choosing to be found.
+                                         # for a list of metadata properties, see https://github.com/peterc/pismo
+                                         # To limit keywords to specific items we care about, consider this doc fragment --
+                                         #   New! The keywords method accepts optional arguments. These are the current defaults:
+                                         #   :stem_at => 20, :word_length_limit => 15, :limit => 20, :remove_stopwords => true, :minimum_score => 2
+                                         #   You can also pass an array to keywords with :hints => arr if you want only words of your choosing to be found.
 
-    return if html.empty? || !metadata || url =~ /%23/  # whats up with %23?
+    return if html.empty? || !metadata || url =~ /%23/ # whats up with %23?
 
     h1 = (doc / :h1).first
     title = h1 ? h1.inner_text : metadata.title
@@ -36,17 +36,17 @@ module ForkDiffMerge
     #ap sfw_page_data
 
     begin
-    text = HtmlMassage.text html
-    chunks = text.split(/\n{2,}/)
-    chunks.each do |chunk|
-      sfw_page_data['story'] << ({
-        'type' => 'paragraph',
-        'id' => RandomId.generate,
-        'text' => chunk
-      })
-    end
+      text = HtmlMassage.html html
+      chunks = text.split(/\n{2,}/)
+      chunks.each do |chunk|
+        sfw_page_data['story'] << ({
+          'type' => 'paragraph',
+          'id' => RandomId.generate,
+          'text' => chunk
+        })
+      end
     rescue Encoding::CompatibilityError
-      return   # TODO: manage this inside the html_massage gem!
+      return # TODO: manage this inside the html_massage gem!
     end
 
     url_chunks = url.match(%r{
@@ -65,7 +65,7 @@ module ForkDiffMerge
 
     p 222, options
     if options[:username]
-      topic = options[:topic].parameterize if options[:topic] || url_chunks.first  # url.gsub(%r{^https?://(www\.)?}, '').split('.').first
+      topic = options[:topic].parameterize if options[:topic] || url_chunks.first # url.gsub(%r{^https?://(www\.)?}, '').split('.').first
       username = options[:username].parameterize
       subdomain = "#{topic}.#{username}"
     else

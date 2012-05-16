@@ -18,9 +18,7 @@ require 'json'
 $LOAD_PATH.unshift(File.expand_path('../lib', (File.dirname(__FILE__))))
 require 'ruby_extensions/string'
 require 'sfw/random_id'
-require 'forkdiffmerge/fork'
-
-include ForkDiffMerge
+require 'fedwiki/fork'; include FedWiki
 
 MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
 
@@ -32,7 +30,7 @@ def crawl(starting_url)
       sleep rand*16   # Note: Anemone runs 4 threads by default
       doc = page.doc
       url = page.url.to_s
-      fork_url = fork_to_sfw doc, url
+      fork_url = fedwiki_fork doc, url
       puts "Created fedwiki page -->"
       puts fork_url
     end
