@@ -15,10 +15,9 @@
 require 'anemone'
 require 'json'
 
-$LOAD_PATH.unshift(File.expand_path('../lib', (File.dirname(__FILE__))))
-require 'ruby_extensions/string'
-require 'sfw/random_id'
-require 'fedwiki/fork'; include FedWiki
+Dir[File.expand_path("../lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
+
+include FedWiki
 
 MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
 
