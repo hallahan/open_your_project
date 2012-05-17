@@ -100,7 +100,6 @@ module FedWiki
   end
 
   def sfw_do(sfw_action_url, action, sfw_page_data)
-    p 111, sfw_action_url
     action_json = JSON.pretty_generate 'type' => action, 'item' => sfw_page_data
     RestClient.put "#{sfw_action_url}", :action => action_json, :content_type => :json, :accept => :json
   end
