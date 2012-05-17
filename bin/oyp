@@ -38,10 +38,7 @@ end
 
 ### The action: read args and crawl --
 
-unless ENV['SFW_BASE_DOMAIN']
-  puts "Please set the environment variable 'SFW_BASE_DOMAIN'"
-  exit 1
-end
+raise "Please set the environment variable 'SFW_BASE_DOMAIN'" if ENV['SFW_BASE_DOMAIN'].nil? || ENV['SFW_BASE_DOMAIN'].empty?
 
 url = ARGV.first
 if url

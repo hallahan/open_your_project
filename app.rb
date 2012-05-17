@@ -12,6 +12,8 @@ include FedWiki
 enable :logging, :dump_errors, :raise_errors
 set :show_exceptions, true if development?
 
+raise "Please set the environment variable 'SFW_BASE_DOMAIN'" if ENV['SFW_BASE_DOMAIN'].nil? || ENV['SFW_BASE_DOMAIN'].empty?
+
 def development?
   ENV['RACK_ENV'] == 'development'
 end
