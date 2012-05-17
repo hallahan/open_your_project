@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/harlantwood/html_massage.git
-  revision: 528155ce1d92d97ab19aa8816af1d02744ca9882
+  revision: 51c0ff350db2b35ee39a142ed9508a1bef1e9375
   ref: master
   specs:
     html_massage (0.1.1)
