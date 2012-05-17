@@ -13,9 +13,17 @@ module FedWiki
 
   class << self
     def open(doc, url, options={})
-      unless open_license?(doc)
-        puts "Refusing to crawl; no known open license: #{url}"
+      print "... Trying #{url} ... "
+
+      return if doc.nil?
+
+      license_links = open_license_links(doc)
+      if license_links.empty?
+        puts "NO"
+        #puts "Refusing to crawl; no known open license"
         return
+      #else
+        #  puts "YES: #{url}"
       end
 
       html = doc.to_s
@@ -36,7 +44,7 @@ module FedWiki
       sfw_page_data = {
         'title' => title,
         'keywords' => keywords,
-        'license_links' => open_license_links(doc),
+        'license_links' => license_links,
         'story' => [],
       }
 
@@ -59,13 +67,13 @@ module FedWiki
         (#{SUBDOMAIN_PATTERN})
         ((?:\.#{SUBDOMAIN_PATTERN})+)?
         (?::\d+)?  # port
-        (/.*)      # path
+        (/.*|)     # path
         $
       }x).to_a
 
       url_chunks.shift # discard full regexp match
       path = url_chunks.pop
-      slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}/\d{2}], '').parameterize
+      slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}(/\d{2})?], '').parameterize
       origin_domain = url_chunks.join
 
       if options[:username]
@@ -90,13 +98,16 @@ module FedWiki
       end
       html = doc.to_html
 
-      #html.rstrip_lines!
-      chunks = html.split(/\n{2,}/)
-      chunks.each do |chunk|
+      html.rstrip_lines!
+      html_chunks = html.split(/\n{2,}/)
+      sep = [%{<hr />}]
+      attribution_html = [%{This page was forked with permission from <a href="#{url}" target="_blank">#{url}</a>}]
+
+      (html_chunks + sep + attribution_html + sep + license_links).each do |html_chunk|
         sfw_page_data['story'] << ({
           'type' => 'paragraph',
           'id' => RandomId.generate,
-          'text' => chunk
+          'text' => html_chunk
         })
       end
 
@@ -109,13 +120,9 @@ module FedWiki
       fork_url = "http://#{sfw_site}/view/#{slug}"
     end
 
-    def open_license?(doc)
-      !open_license_links(doc).nil?
-    end
-
     def open_license_links(doc)
-      license_links(doc, 'a[rel="license"]') ||
-      license_links(doc, 'a')
+      links = license_links(doc, 'a[rel="license"]')
+      !links.empty? ? links : license_links(doc, 'a')
     end
 
     def license_links(doc, selector)
@@ -123,21 +130,9 @@ module FedWiki
         OPEN_LICENSE_PATTERNS.map do |pattern|
           license_link.to_s if license_link['href'].to_s.match(Regexp.new pattern)
         end
-      end.flatten.compact
-      links.empty? ? nil : links
+      end
+      links.flatten.compact
     end
-
-    #.map{ |lic| lic.to_s }
-    #license_links.map do |license_link|
-    #  OPEN_LICENSE_PATTERNS.map{ |pattern| license_link['href'] if license_link['href'].match(Regexp.new pattern) }
-    #end
-    #
-    #if license_links.empty?
-    #  link_urls = doc.css('a').map{ |link| link.to_s }
-    #  link_urls.map do |link_url|
-    #    OPEN_LICENSE_PATTERNS.map{ |pattern| link_url if link_url.match(Regexp.new pattern) }
-    #  end
-    #end
 
     def sfw_do(sfw_action_url, action, sfw_page_data)
       action_json = JSON.pretty_generate 'type' => action, 'item' => sfw_page_data

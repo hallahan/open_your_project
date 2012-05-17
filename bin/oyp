@@ -17,20 +17,26 @@ require 'json'
 
 Dir[File.expand_path("../lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
 
-MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
+MAX_LINKS_PER_SITE = (ENV['MAX_LINKS_PER_SITE'] || 2).to_i
 
 def crawl(starting_url)
-  Anemone.crawl(starting_url) do |anemone|
-    anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
-    anemone.on_every_page do |page|
-      #puts '~'*20
-      #sleep rand*16   # Note: Anemone runs 4 threads by default
-      sleep rand*4   # Note: Anemone runs 4 threads by default
-      doc = page.doc
-      url = page.url.to_s
-      if fork_url = FedWiki.open(doc, url)
-        puts "Created fedwiki page -->"
-        puts fork_url
+  html = RestClient.get starting_url rescue nil
+  doc = Nokogiri::HTML(html)
+  if html && (fork_url = FedWiki.open(doc, starting_url))
+    puts "Created fedwiki page -->"
+    puts fork_url
+    Anemone.crawl(starting_url) do |anemone|
+      anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
+      anemone.on_every_page do |page|
+        #puts '~'*20
+        #sleep rand*16   # Note: Anemone runs 4 threads by default
+        sleep rand*8 # Note: Anemone runs 4 threads by default
+        doc = page.doc
+        url = page.url.to_s
+        if fork_url = FedWiki.open(doc, url)
+          puts "Created fedwiki page -->"
+          puts fork_url
+        end
       end
     end
   end
