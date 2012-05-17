@@ -37,8 +37,7 @@ module FedWiki
 
       return if html.empty? || !metadata || url =~ /%23/ # whats up with %23?
 
-      h1 = (doc / :h1).first
-      title = h1 ? h1.inner_text : metadata.title
+      title = extract_title(doc) || metadata.title
       keywords = metadata.keywords.map(&:first)
 
       sfw_page_data = {
@@ -132,6 +131,16 @@ module FedWiki
         end
       end
       links.flatten.compact
+    end
+
+    def extract_title(doc)
+      %w[ div.title div.h0 h1 title ].each do |selector|
+        if ( title_elements = doc.search( selector ) ).length == 1
+          title = title_elements.first.content.split( /\s+(-|\|)/ ).first.to_s.strip
+          return title unless title.empty?
+        end
+      end
+      nil
     end
 
     def sfw_do(sfw_action_url, action, sfw_page_data)
