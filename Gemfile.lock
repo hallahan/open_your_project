@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/harlantwood/html_massage.git
-  revision: f8078bb4c13feb16f536d8323156cb2eface6f6e
+  revision: 58541b199cf7de023813ec6422dad6e4c9c9a165
   specs:
     html_massage (0.1.1)
       nokogiri (~> 1.4.4)

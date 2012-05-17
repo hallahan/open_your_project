@@ -54,7 +54,7 @@ module FedWiki
       #ap sfw_page_data
 
       begin
-        html = HtmlMassage.html html, :source_url => url, :links => :absolute
+        html = HtmlMassage.html html, :source_url => url, :links => :absolute, :images => :absolute
       rescue Encoding::CompatibilityError
         return # TODO: manage this inside the html_massage gem!
       end
