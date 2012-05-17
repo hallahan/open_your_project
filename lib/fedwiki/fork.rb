@@ -91,7 +91,7 @@ module FedWiki
       links.each do |link|
         if match = link['href'].to_s.match(%r[.+?#{origin_domain}(?::\d+)?(?<href_path>/.*)$])
           link_slug = match['href_path'].parameterize
-          link['href'] = "/view/#{link_slug}"
+          link['href'] = link_slug
           link['class'] = "#{link['class']} fedwiki-internal".strip # the class is for later client-side processing
         end
       end
