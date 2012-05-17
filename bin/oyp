@@ -17,8 +17,6 @@ require 'json'
 
 Dir[File.expand_path("../lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
 
-include FedWiki
-
 MAX_LINKS_PER_SITE = ( ENV['MAX_LINKS_PER_SITE'] || 2 ).to_i
 
 def crawl(starting_url)
@@ -26,12 +24,14 @@ def crawl(starting_url)
     anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
     anemone.on_every_page do |page|
       #puts '~'*20
-      sleep rand*16   # Note: Anemone runs 4 threads by default
+      #sleep rand*16   # Note: Anemone runs 4 threads by default
+      sleep rand*4   # Note: Anemone runs 4 threads by default
       doc = page.doc
       url = page.url.to_s
-      fork_url = fedwiki_fork doc, url
-      puts "Created fedwiki page -->"
-      puts fork_url
+      if fork_url = FedWiki.open(doc, url)
+        puts "Created fedwiki page -->"
+        puts fork_url
+      end
     end
   end
 end
