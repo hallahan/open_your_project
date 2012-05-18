@@ -12,12 +12,11 @@ class String
 
     massaged.gsub!(/#.*$/, '')               # strip off anchor tags, eg #section-2
     massaged.gsub!(/\?.*$/, '')              # strip off query sting, eg ?cid=6a0
-    massaged.gsub!(/.[a-z]{3,10}$/i, '')     # strip off file extensions, eg .html
+    massaged.gsub!(/\.[a-z]{3,10}$/i, '')     # strip off file extensions, eg .html
 
     match = massaged.match %r[
       ^
         (
-          #### (?:/[a-z]+)?    #
           /\d{4}/\d{2}    # optional leading date stamp, eg 2012/12
           (?:/\d{2})?     #                              or 2012/12/21
         )?
@@ -42,7 +41,7 @@ class String
       massaged.gsub!(/^#{re_sep}|#{re_sep}$/, '')
     end
 
-    #print "\n    [ slug(#{self}) -> #{massaged} ]"
+    # print "\n    [ slug -> #{self} -> \n              #{massaged} ]"
     massaged
   end
 
