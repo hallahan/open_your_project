@@ -4,7 +4,7 @@ require 'rest_client'
 
 module FedWiki
 
-  SUBDOMAIN_PATTERN = "[a-z0-9][a-z0-9-]{0,62}" # subdomains max at 63 characters
+  SUBDOMAIN_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9-]{0,62}" # subdomains max at 63 characters.  although technically lower case, URLs may come in in mixed case.
 
   OPEN_LICENSE_PATTERNS = %w[
     gnu.org/licenses
@@ -13,22 +13,20 @@ module FedWiki
 
   class << self
     def open(doc, url, options={})
-      print "... Trying #{url} ... "
+      puts
+      print "    ... Trying #{url} ... "
 
       return if doc.nil?
 
       license_links = open_license_links(doc)
       if license_links.empty?
-        puts "NO"
-        #puts "Refusing to crawl; no known open license"
+        print "no known open license"
         return
-      #else
-        #  puts "YES: #{url}"
       end
 
       html = doc.to_s
 
-      metadata = Pismo::Document.new(html) # rescue nil
+      metadata = Pismo::Document.new(html) rescue nil  # pismo occasionally crashes, eg on invalid UTF8
                                            # for a list of metadata properties, see https://github.com/peterc/pismo
                                            # To limit keywords to specific items we care about, consider this doc fragment --
                                            #   New! The keywords method accepts optional arguments. These are the current defaults:
@@ -53,11 +51,7 @@ module FedWiki
 
       #ap sfw_page_data
 
-      begin
-        html = HtmlMassage.html html, :source_url => url, :links => :absolute, :images => :absolute
-      rescue Encoding::CompatibilityError
-        return # TODO: manage this inside the html_massage gem!
-      end
+      html = massage_html(html, url)
 
       url_chunks = url.match(%r{
         ^
@@ -66,13 +60,13 @@ module FedWiki
         (#{SUBDOMAIN_PATTERN})
         ((?:\.#{SUBDOMAIN_PATTERN})+)?
         (?::\d+)?  # port
-        (/.*|)     # path
+        (/.*)?     # path
         $
       }x).to_a
 
       url_chunks.shift # discard full regexp match
       path = url_chunks.pop
-      slug = path.match(%r{^/?$}) ? 'home' : path.gsub(%r[^/\d{4}/\d{2}(/\d{2})?], '').parameterize
+      slug = path.to_s.slug
       origin_domain = url_chunks.join
 
       if options[:username]
@@ -90,7 +84,7 @@ module FedWiki
       links = doc / 'a'
       links.each do |link|
         if match = link['href'].to_s.match(%r[.+?#{origin_domain}(?::\d+)?(?<href_path>/.*)$])
-          link_slug = match['href_path'].parameterize
+          link_slug = match['href_path'].slug
           link['href'] = link_slug
           link['class'] = "#{link['class']} fedwiki-internal".strip # the class is for later client-side processing
         end
@@ -119,9 +113,30 @@ module FedWiki
       fork_url = "http://#{sfw_site}/view/#{slug}"
     end
 
+    def massage_html(html, url)
+      sanitize_options = HtmlMassage::DEFAULT_SANITIZE_OPTIONS.merge(
+          :elements => [
+              'a', 'img',
+              'h1', 'h2', 'h3', 'hr',
+              'table', 'th', 'tr', 'td',
+              'em', 'strong',
+          ],
+          :attributes => {
+              :all => [],
+              'a' => ['href'],
+              'img' => ['src', 'alt'],
+          }
+      )
+      begin
+        HtmlMassage.html html, :source_url => url, :links => :absolute, :images => :absolute, :sanitize => sanitize_options
+      rescue Encoding::CompatibilityError
+        return # TODO: manage this inside the html_massage gem!
+      end
+    end
+
     def open_license_links(doc)
       links = license_links(doc, 'a[rel="license"]')
-      !links.empty? ? links : license_links(doc, 'a')
+      #!links.empty? ? links : license_links(doc, 'a')
     end
 
     def license_links(doc, selector)
@@ -145,7 +160,11 @@ module FedWiki
 
     def sfw_do(sfw_action_url, action, sfw_page_data)
       action_json = JSON.pretty_generate 'type' => action, 'item' => sfw_page_data
+      #begin
       RestClient.put "#{sfw_action_url}", :action => action_json, :content_type => :json, :accept => :json
+      #rescue RestClient::ResourceNotFound
+      #  puts "!!! ERROR: SFW SERVER NOT FOUND at #{sfw_action_url}"
+      #end
     end
 
   end
