@@ -24,19 +24,28 @@ def crawl(starting_url)
   doc = Nokogiri::HTML(html)
   if html && (fork_url = FedWiki.open(doc, starting_url))
     puts "Created fedwiki page -->"
+    puts
     puts fork_url
+    visited = [starting_url]
+    attempted = 0
     Anemone.crawl(starting_url) do |anemone|
-      anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
+      #anemone.focus_crawl { |page| page.links.slice(0...MAX_LINKS_PER_SITE) }
       anemone.on_every_page do |page|
-        #puts '~'*20
-        #sleep rand*16   # Note: Anemone runs 4 threads by default
-        sleep rand*8 # Note: Anemone runs 4 threads by default
-        doc = page.doc
         url = page.url.to_s
-        if fork_url = FedWiki.open(doc, url)
-          puts "Created fedwiki page -->"
-          puts fork_url
+        unless visited.include?(url)
+          #puts '~'*20
+          sleep rand*16   # Note: Anemone runs 4 threads by default
+          #sleep rand*8 # Note: Anemone runs 4 threads by default
+          doc = page.doc
+          if fork_url = FedWiki.open(doc, url)
+            puts "Created fedwiki page -->"
+            puts
+            puts fork_url
+            visited << url
+          end
         end
+        attempted += 1
+        return if (visited.size >= MAX_LINKS_PER_SITE) || (attempted >= MAX_LINKS_PER_SITE * 2)
       end
     end
   end
