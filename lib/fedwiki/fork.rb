@@ -91,7 +91,7 @@ module FedWiki
       end
       html = doc.to_html
 
-      html.rstrip_lines!
+      html.strip_lines!
       html_chunks = html.split(/\n{2,}/)
       sep = [%{<hr />}]
       attribution_html = [%{This page was forked with permission from <a href="#{url}" target="_blank">#{url}</a>}]

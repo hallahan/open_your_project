@@ -1,16 +1,16 @@
 class String
-  def rstrip_lines!
+  def strip_lines!
     lines = split( $/ )    # $/ is the current ruby line ending, \n by default
-    lines.map!( &:rstrip )
+    lines.map!( &:strip )
     processed = lines.join( $/ )
-    processed.rstrip!
+    processed.strip!
     replace( processed )
   end
 
   def slug(sep = '-')
     massaged = self.dup
 
-    massaged.gsub!(/#.*$/, '')               # strip off anchor tags, eg #comments
+    massaged.gsub!(/#.*$/, '')               # strip off anchor tags, eg #section-2
     massaged.gsub!(/\?.*$/, '')              # strip off query sting, eg ?cid=6a0
     massaged.gsub!(/.[a-z]{3,10}$/i, '')     # strip off file extensions, eg .html
 
@@ -42,7 +42,7 @@ class String
       massaged.gsub!(/^#{re_sep}|#{re_sep}$/, '')
     end
 
-    print "\n    [ slug(#{self}) -> #{massaged} ]"
+    #print "\n    [ slug(#{self}) -> #{massaged} ]"
     massaged
   end
 
