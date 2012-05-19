@@ -15,6 +15,8 @@ class Controller < Sinatra::Base
 register Sinatra::AssetPack
 register SinatraMore::MarkupPlugin
 
+APP_SUBDOMAIN = ENV['APP_SUBDOMAIN'] || raise("Please set env var APP_SUBDOMAIN")
+
 enable :logging, :dump_errors, :raise_errors
 set :show_exceptions, true if development?
 
@@ -50,12 +52,13 @@ def development?
 end
 
 get '/' do
-  if request.host.match /^www\./
+  if request.host.match /^#{APP_SUBDOMAIN}\./
     @fork = Fork.new
     haml :home
   else
-    port_suffix = request.port == 80 ? '' : ":#{request.port}"
-    redirect "#{request.scheme}://www.#{request.host}#{port_suffix}"
+    #port_suffix = request.port == 80 ? '' : ":#{request.port}"
+    #redirect "#{request.scheme}://#{APP_SUBDOMAIN}.#{request.host}#{port_suffix}"
+    redirect "http://enlightenedstructure.org/Software_Zero/"
   end
 end
 
