@@ -11,8 +11,8 @@ gem 'nokogiri'
 gem 'pismo'
 gem 'rest-client'
 gem 'sinatra'
-#gem 'sinatra_more'
-gem 'formtastic'
+gem 'sinatra_more'
+gem 'sinatra-assetpack', :require => 'sinatra/assetpack'
 gem 'thin'
 
 group :development do

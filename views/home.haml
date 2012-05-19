@@ -16,14 +16,14 @@
 .open
   .action
     Enter a project URL
-  %div
-    %form{:method => 'post', :action => "/"}
+    - form_for @fork, '/' do |f|
       %div
-        %input{:type => 'text', :name => 'url', :class => "big", :placeholder => 'www.change-the-world.org', :value => ('http://en.wikipedia.org/wiki/Technological_singularity' if development?)}
+        = f.error_messages
       %div
-        %input{:type => 'text', :name => 'username', :class => "", :placeholder => 'Your name', :value => ('John Q. Public' if development?)}
+        = f.text_field :url, :class => "big", :placeholder => 'www.change-the-world.org', :value => @fork.url || ('http://en.wikipedia.org/wiki/Technological_singularity' if form_pre_filled?)
       %div
-        %input{:type => 'text', :name => 'topic', :class => "", :placeholder => 'Topic: help categorize this content for yourself and others', :value => ('Singularity' if development?)}
+        = f.text_field :username, :placeholder => 'Your name', :value => @fork.username || ('John Q. Public' if form_pre_filled?)
       %div
-        %input{:type => 'submit', :value => 'Open Now', :class => 'big'}
+        = f.text_field :topic, :placeholder => 'Topic: help categorize this content for yourself and others', :value => @fork.topic || ('Singularity' if form_pre_filled?)
       %div
+        = f.submit 'Open Now', :class => 'big'

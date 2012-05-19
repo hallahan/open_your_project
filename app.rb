@@ -4,13 +4,46 @@ require 'json'
 require 'nokogiri'
 require 'rest_client'
 require 'sinatra'
+require 'sinatra/assetpack'
+require 'sinatra_more/markup_plugin'
 
 Dir[File.expand_path("lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
+require (File.expand_path 'fork', File.dirname(__FILE__))
+
+class Controller < Sinatra::Base
+
+register Sinatra::AssetPack
+register SinatraMore::MarkupPlugin
 
 enable :logging, :dump_errors, :raise_errors
 set :show_exceptions, true if development?
 
 raise "Please set the environment variable 'SFW_BASE_DOMAIN'" if ENV['SFW_BASE_DOMAIN'].nil? || ENV['SFW_BASE_DOMAIN'].empty?
+
+set :root, File.dirname(__FILE__)
+assets {
+  serve '/js',     from: 'app/js'        # Optional
+  serve '/css',    from: 'app/css'       # Optional
+  serve '/images', from: 'app/images'    # Optional
+
+  # The second parameter defines where the compressed version will be served.
+  # (Note: that parameter is optional, AssetPack will figure it out.)
+  js :app, '/js/app.js', [
+    '/js/**/*.js',
+  ]
+
+  css :application, '/css/application.css', [
+    '/css/*.css'
+  ]
+
+  js_compression :jsmin # Optional
+  css_compression :sass # Optional
+}
+
+  def form_pre_filled?
+  development?
+  false
+end
 
 def development?
   ENV['RACK_ENV'] == 'development'
@@ -18,6 +51,7 @@ end
 
 get '/' do
   if request.host.match /^www\./
+    @fork = Fork.new
     haml :home
   else
     port_suffix = request.port == 80 ? '' : ":#{request.port}"
@@ -26,18 +60,29 @@ get '/' do
 end
 
 post '/' do
-  url = params[:url] =~ %r{^https?://} ? params[:url] : "http://#{params[:url]}"
-  html = RestClient.get url
-  doc = Nokogiri::HTML(html)
-  options = params.symbolize_keys.slice(:username, :topic)
-  fork_url = FedWiki.open(doc, url, options)
-  redirect fork_url
+  @fork = Fork.new(params[:fork])
+  p 222, @fork.valid?
+  if @fork.valid?
+    html = RestClient.get @fork.url
+    doc = Nokogiri::HTML(html)
+    begin
+      fork_url = FedWiki.open(doc, @fork.url, :username => @fork.username, :topic => @fork.topic)
+      redirect fork_url
+    rescue InterWiki::NoKnownOpenLicense
+      # add error to @fork
+      haml :home
+    end
+  else
+    haml :home
+  end
 end
 
 get %r{^/viz/(\w+)$} do |viz|
   @viz = viz
   @json_path = "http://sfw.#{ENV['SFW_BASE_DOMAIN']}/viz/#{viz}.json"
   haml viz.to_sym
+end
+
 end
 
 #get '/curators' do

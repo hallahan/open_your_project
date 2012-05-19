@@ -11,15 +11,8 @@
   %meta{:content => "320", :name => "MobileOptimized"}/
   %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
   %link{:href => "/favicon.png", :rel => "icon"}/
-  %link{:href => "/stylesheets/screen.css", :media => "screen, projection", :rel => "stylesheet", :type => "text/css"}/
-  %link{:href => "/stylesheets/home.css", :media => "screen, projection", :rel => "stylesheet", :type => "text/css"}/
-  %script{:src => "/javascripts/modernizr-2.0.js"}
-  %script{:src => "/javascripts/ender.js"}
-  %script{:src => "/javascripts/octopress.js", :type => "text/javascript"}
-
-  / d3
-  %script{:src => "/javascripts/d3/d3.v2.js", :type => "text/javascript"}
-  %link{:href => "/stylesheets/pack.css", :rel => "stylesheet", :type => "text/css"}/
+  = css :application, :media => 'screen'
+  = js  :app
 
   / Fonts from Google"s Web font directory at http://google.com/webfonts
   %link{:href => "http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic", :rel => "stylesheet", :type => "text/css"}/
@@ -31,7 +24,7 @@
         %a{:href => "/"} Open Your Project
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         %span.message
-          Shhh... we're in private alpha, keep us secret
+          Shhh... we're in private alpha, keep us a secret
       %h2
         Collaborative sharing for social change projects
   %nav{:role => "navigation"}
