@@ -17,13 +17,21 @@
   .action
     Enter a project URL
   %div
-    %form{:method => 'post', :action => "/"}
+    = semantic_form_for @fork do |f|
+      -#%div
+      = f.semantic_errors
+      -#%div
+      = f.text_field :url, :class => "big", :placeholder => 'www.change-the-world.org', :value => ('http://en.wikipedia.org/wiki/Technological_singularity' if form_pre_filled?)
+      -#%div
+      -#  %input{:type => 'text', :name => 'username', :class => "", :placeholder => 'Your name', :value => ('John Q. Public' if form_pre_filled?)}
+      -#%div
+      -#  %input{:type => 'text', :name => 'topic', :class => "", :placeholder => 'Topic: help categorize this content for yourself and others', :value => ('Singularity' if form_pre_filled?)}
+      -#%div
+      = f.submit 'Open Now', :class => 'big'
       %div
-        %input{:type => 'text', :name => 'url', :class => "big", :placeholder => 'www.change-the-world.org', :value => ('http://en.wikipedia.org/wiki/Technological_singularity' if development?)}
+
+    -#%form{:method => 'post', :action => "/"}
       %div
-        %input{:type => 'text', :name => 'username', :class => "", :placeholder => 'Your name', :value => ('John Q. Public' if development?)}
-      %div
-        %input{:type => 'text', :name => 'topic', :class => "", :placeholder => 'Topic: help categorize this content for yourself and others', :value => ('Singularity' if development?)}
-      %div
-        %input{:type => 'submit', :value => 'Open Now', :class => 'big'}
-      %div
+        = error_messages_for(@fork)
+        - # user = stub(:class => "User", :errors => stub(:full_messages => ["1", "2"], :none? => false), :blank? => false)
+        - # actual_html = error_messages_for(user)

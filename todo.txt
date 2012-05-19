@@ -1,0 +1,4 @@
+add example:
+
+ harlan@thunder  ~/HKB/code/mine/open_your_project [master] $ SFW_BASE_DOMAIN=lvh.me:1111 MAX_LINKS_PER_SITE=2 bundle exec bin/oyp http://en.wikipedia.org/wiki/Special:Random
+
