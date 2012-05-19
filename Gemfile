@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'active_support'
+gem 'activemodel'
 gem 'haml'
 gem 'html_massage', :git => 'git://github.com/harlantwood/html_massage.git'
 #gem 'html_massage', :path => '~/HKB/code/mine/html_massage'
@@ -10,6 +11,8 @@ gem 'nokogiri'
 gem 'pismo'
 gem 'rest-client'
 gem 'sinatra'
+#gem 'sinatra_more'
+gem 'formtastic'
 gem 'thin'
 
 group :development do

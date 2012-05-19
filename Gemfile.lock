@@ -11,12 +11,17 @@ GEM
   specs:
     active_support (3.0.0)
       activesupport (= 3.0.0)
+    activemodel (3.0.0)
+      activesupport (= 3.0.0)
+      builder (~> 2.1.2)
+      i18n (~> 0.4.1)
     activesupport (3.0.0)
     addressable (2.2.8)
     anemone (0.7.1)
       nokogiri (>= 1.3.0)
       robotex (>= 1.0.0)
     awesome_print (1.0.2)
+    builder (2.1.2)
     chronic (0.6.7)
     daemons (1.1.8)
     diff-lcs (1.1.3)
@@ -28,14 +33,14 @@ GEM
       rspec (~> 2.0)
       rspec-instafail (~> 0.2.0)
       ruby-progressbar (~> 0.0.10)
-    haml (3.1.4)
+    haml (3.1.6)
     heroku (2.25.0)
       launchy (>= 0.3.2)
       netrc (~> 0.7.1)
       rest-client (~> 1.6.1)
       rubyzip
-    i18n (0.6.0)
-    json (1.7.0)
+    i18n (0.4.2)
+    json (1.7.3)
     launchy (2.1.0)
       addressable (~> 2.2.6)
     mime-types (1.18)
@@ -55,15 +60,15 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     robotex (1.0.0)
-    rspec (2.4.0)
-      rspec-core (~> 2.4.0)
-      rspec-expectations (~> 2.4.0)
-      rspec-mocks (~> 2.4.0)
-    rspec-core (2.4.0)
-    rspec-expectations (2.4.0)
-      diff-lcs (~> 1.1.2)
+    rspec (2.10.0)
+      rspec-core (~> 2.10.0)
+      rspec-expectations (~> 2.10.0)
+      rspec-mocks (~> 2.10.0)
+    rspec-core (2.10.0)
+    rspec-expectations (2.10.0)
+      diff-lcs (~> 1.1.3)
     rspec-instafail (0.2.4)
-    rspec-mocks (2.4.0)
+    rspec-mocks (2.10.1)
     ruby-progressbar (0.0.10)
     rubyzip (0.9.8)
     sanitize (2.0.3)
@@ -77,6 +82,12 @@ GEM
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
+    sinatra_more (0.3.43)
+      activesupport
+      bundler (>= 0.9.2)
+      sinatra (>= 0.9.2)
+      thor (>= 0.11.8)
+      tilt (>= 0.2)
     thin (1.3.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -89,6 +100,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_support
+  activemodel
   anemone
   awesome_print
   foreman
@@ -107,4 +119,5 @@ DEPENDENCIES
   rspec-expectations
   rspec-mocks
   sinatra
+  sinatra_more
   thin
