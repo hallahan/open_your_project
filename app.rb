@@ -1,4 +1,9 @@
-require 'active_support/core_ext'
+require 'active_support'
+require 'action_view'
+require 'action_view/context'
+require 'action_view/template/handlers/erb'
+require 'action_view/helpers'
+require 'action_view/helpers/form_helper'
 require 'formtastic'
 require 'haml'
 require 'json'
@@ -11,7 +16,16 @@ require 'sinatra'
 Dir[File.expand_path("lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
 require (File.expand_path 'fork', File.dirname(__FILE__))
 
+ActiveSupport.on_load(:action_view) do
+  include Formtastic::Helpers::FormHelper
+end
+
 class Controller < Sinatra::Base
+
+helpers ActionController::RecordIdentifier
+helpers ActionView::Context
+helpers ActionView::Helpers::FormHelper
+helpers Formtastic::Helpers::FormHelper
 
 #register SinatraMore::MarkupPlugin
 
@@ -31,11 +45,16 @@ end
 
 get '/' do
   if request.host.match /^www\./
+    @fork = Fork.new
     haml :home
   else
     port_suffix = request.port == 80 ? '' : ":#{request.port}"
     redirect "#{request.scheme}://www.#{request.host}#{port_suffix}"
   end
+end
+
+def forks_path;
+  '/'
 end
 
 post '/' do
@@ -52,6 +71,10 @@ post '/' do
     # add error to @fork
     haml :home
   end
+end
+
+def protect_against_forgery?
+  false
 end
 
 get %r{^/viz/(\w+)$} do |viz|

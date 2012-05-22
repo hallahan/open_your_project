@@ -63,6 +63,10 @@ class Fork < FormtasticFauxModel
 
   def initialize(attributes = {})
     super
-    p 111, @url = "http://#{@url}" unless @url.match(%r{^https?://})
+    p 111, @url = "http://#{@url}" unless @url.to_s.match(%r{^https?://})
+  end
+
+  def model_name
+    'Fork'
   end
 end
