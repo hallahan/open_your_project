@@ -16,7 +16,7 @@ class String
       massaged = path.to_s                           # discard protocol, domain, port -- just use path
       massaged.gsub!(/#.*$/, '')                     # strip off anchor tags, eg #section-2
       massaged.gsub!(/\?.*$/, '')                    # strip off query sting, eg ?cid=6a0
-      massaged.gsub!(/\.x[[:alnum:]]{3,10}$/, '')     # strip off file extensions, eg .html
+      massaged.gsub!(/\.[[:alnum:]]{3,10}$/, '')     # strip off file extensions, eg .html
 
       massaged.gsub! %r[
         /\d{4}/\d{2}           # optional leading date stamp, eg /2012/12/great-post    or /blog/2012/12/great-post
