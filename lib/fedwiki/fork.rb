@@ -59,15 +59,11 @@ module FedWiki
         (?:www\.)?
         (#{SUBDOMAIN_PATTERN})
         ((?:\.#{SUBDOMAIN_PATTERN})+)?
-        (?::\d+)?  # port
-        (/.*)?     # path
-        $
       }x).to_a
 
       url_chunks.shift # discard full regexp match
-      path = url_chunks.pop
-      slug = path.to_s.slug
       origin_domain = url_chunks.join
+      slug = url.slug
 
       if options[:username]
         username = options[:username].parameterize
