@@ -111,16 +111,16 @@ module FedWiki
 
     def massage_html(html, url)
       sanitize_options = HtmlMassage::DEFAULT_SANITIZE_OPTIONS.merge(
-          :elements => [
-              'a', 'img',
-              'h1', 'h2', 'h3', 'hr',
-              'table', 'th', 'tr', 'td',
-              'em', 'strong',
+          :elements => %w[
+            a img
+            h1 h2 h3 hr
+            table th tr td
+            em strong b i
           ],
           :attributes => {
-              :all => [],
-              'a' => ['href'],
-              'img' => ['src', 'alt'],
+            :all => [],
+            :a => %w[ href ],
+            :img => %w[ src alt ],
           }
       )
       begin
