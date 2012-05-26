@@ -45,7 +45,8 @@ class String
       massaged.gsub!(/^#{re_sep}|#{re_sep}$/, '')
     end
 
-    # print "\n    [ slug -> #{self} -> \n              #{massaged} ]"
+    #print "\n        orig -> #{self}"
+    #print "\n        slug -> #{massaged}"
     massaged
   end
 

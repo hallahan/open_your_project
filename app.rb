@@ -1,4 +1,10 @@
-require 'active_support/core_ext'
+require 'active_support'
+require 'action_view'
+require 'action_view/context'
+require 'action_view/template/handlers/erb'
+require 'action_view/helpers'
+require 'action_view/helpers/form_helper'
+require 'formtastic'
 require 'haml'
 require 'json'
 require 'nokogiri'
@@ -10,12 +16,19 @@ require 'sinatra_more/markup_plugin'
 Dir[File.expand_path("lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
 require (File.expand_path 'fork', File.dirname(__FILE__))
 
+APP_SUBDOMAIN = ENV['APP_SUBDOMAIN'] || raise("Please set env var APP_SUBDOMAIN")
+
+ActiveSupport.on_load(:action_view) do
+  include Formtastic::Helpers::FormHelper
+end
+
 class Controller < Sinatra::Base
 
 register Sinatra::AssetPack
-register SinatraMore::MarkupPlugin
-
-APP_SUBDOMAIN = ENV['APP_SUBDOMAIN'] || raise("Please set env var APP_SUBDOMAIN")
+helpers ActionController::RecordIdentifier
+helpers ActionView::Context
+helpers ActionView::Helpers::FormHelper
+helpers Formtastic::Helpers::FormHelper
 
 enable :logging, :dump_errors, :raise_errors
 set :show_exceptions, true if development?
@@ -23,6 +36,7 @@ set :show_exceptions, true if development?
 raise "Please set the environment variable 'SFW_BASE_DOMAIN'" if ENV['SFW_BASE_DOMAIN'].nil? || ENV['SFW_BASE_DOMAIN'].empty?
 
 set :root, File.dirname(__FILE__)
+
 assets {
   serve '/js',     from: 'app/js'        # Optional
   serve '/css',    from: 'app/css'       # Optional
@@ -39,10 +53,9 @@ assets {
   ]
 
   js_compression :jsmin # Optional
-  css_compression :sass # Optional
 }
 
-  def form_pre_filled?
+def form_pre_filled?
   development?
   false
 end
@@ -62,22 +75,28 @@ get '/' do
   end
 end
 
+def forks_path;
+  '/'
+end
+
 post '/' do
-  @fork = Fork.new(params[:fork])
+  @fork = Fork.new(params)
   p 222, @fork.valid?
-  if @fork.valid?
-    html = RestClient.get @fork.url
-    doc = Nokogiri::HTML(html)
-    begin
-      fork_url = FedWiki.open(doc, @fork.url, :username => @fork.username, :topic => @fork.topic)
-      redirect fork_url
-    rescue InterWiki::NoKnownOpenLicense
-      # add error to @fork
-      haml :home
-    end
-  else
+  (haml :home && return) if !@fork.valid?
+
+  html = RestClient.get @fork.url
+  doc = Nokogiri::HTML(html)
+  begin
+    fork_url = FedWiki.open(doc, @fork.url, :username => @fork.username, :topic => @fork.topic)
+    redirect fork_url
+  rescue InterWiki::NoKnownOpenLicense
+    # add error to @fork
     haml :home
   end
+end
+
+def protect_against_forgery?
+  false
 end
 
 get %r{^/viz/(\w+)$} do |viz|

@@ -15,15 +15,17 @@
 
 .open
   .action
-    Enter a project URL
-    - form_for @fork, '/' do |f|
+    .call_to_action
+      Enter a project URL
+    = semantic_form_for @fork do |f|
+      -#%div
+      = f.semantic_errors
+      -#%div
+      -#= f.text_field :url, :class => "big", :placeholder => 'www.change-the-world.org', :@fork.url || ('http://en.wikipedia.org/wiki/Technological_singularity' if form_pre_filled?)
+      -#%div
+      -#  %input{:type => 'text', :name => 'username', :class => "", :placeholder => 'Your name', :value => @fork.username || ('John Q. Public' if form_pre_filled?)}
+      -#%div
+      -#  %input{:type => 'text', :name => 'topic', :class => "", :placeholder => 'Topic: help categorize this content for yourself and others', :value => @fork.topic || ('Singularity' if form_pre_filled?)}
+      -#%div
+      = f.submit 'Open Now', :class => 'big'
       %div
-        = f.error_messages
-      %div
-        = f.text_field :url, :class => "big", :placeholder => 'www.change-the-world.org', :value => @fork.url || ('http://en.wikipedia.org/wiki/Technological_singularity' if form_pre_filled?)
-      %div
-        = f.text_field :username, :placeholder => 'Your name', :value => @fork.username || ('John Q. Public' if form_pre_filled?)
-      %div
-        = f.text_field :topic, :placeholder => 'Topic: help categorize this content for yourself and others', :value => @fork.topic || ('Singularity' if form_pre_filled?)
-      %div
-        = f.submit 'Open Now', :class => 'big'
