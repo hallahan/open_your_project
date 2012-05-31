@@ -2,7 +2,12 @@ require 'pismo'
 require 'html_massage'
 require 'rest_client'
 
+require_relative 'random_id'
+require_relative '../../config/initializers/string'
+
 module FedWiki
+
+  class NoKnownOpenLicense < RuntimeError ; end
 
   SUBDOMAIN_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9-]{0,62}" # subdomains max at 63 characters.  although technically lower case, URLs may come in in mixed case.
 
@@ -10,6 +15,8 @@ module FedWiki
     gnu.org/licenses
     creativecommons.org/licenses
   ]
+
+  SFW_BASE_DOMAIN = ENV['SFW_BASE_DOMAIN'] || raise("please set the environment variable SFW_BASE_DOMAIN")
 
   class << self
     def open(doc, url, options={})

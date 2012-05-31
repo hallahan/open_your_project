@@ -1,0 +1,25 @@
+%ul.overview
+  %li
+    &raquo;
+    Transfer any Creative Commons licensed project
+    into an open wiki collaboration framework
+  %li
+    &raquo;
+    Others can copy the project,
+    contribute ideas and suggest improvements
+  %li
+    &raquo;
+    The project acts as an idea seed, giving birth
+    to trees of remixes, spreading through
+    communities and trust networks
+
+.open
+  .action
+    Enter a project URL
+  = semantic_form_for @page do |f|
+    = f.inputs do
+      = f.input :url,      :placeholder => 'www.change-the-world.org',                                    :input_html => { :value => @page.url || ('http://en.wikipedia.org/wiki/Technological_singularity' if form_pre_filled?) } #, :class => "big"
+      = f.input :username, :placeholder => 'Your name',                                                   :input_html => { :value => @page.username || ('John Q. Public' if form_pre_filled?) }
+      = f.input :topic,    :placeholder => 'Topic: help categorize this content for yourself and others', :input_html => { :value => @page.topic || ('Singularity' if form_pre_filled?) }
+    = f.actions do
+      = f.action :submit, :as => :button #'Open Now'
