@@ -67,9 +67,13 @@ class Fork < FormtasticFauxModel
   validates_length_of :topic, :minimum => 8
   validates_length_of :username, :minimum => 8
 
+  self.types = {
+     :description => :text,
+  }
+
   def initialize(attributes = {})
     super
-    p 111, @url = "http://#{@url}" unless @url.to_s.match(%r{^https?://})
+    @url = "http://#{@url}" unless @url.to_s.match(%r{^https?://})
   end
 
   def model_name

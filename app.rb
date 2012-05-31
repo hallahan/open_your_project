@@ -1,4 +1,5 @@
 require 'active_support'
+require 'active_support/all'
 require 'action_view'
 require 'action_view/context'
 require 'action_view/template/handlers/erb'
@@ -11,7 +12,6 @@ require 'nokogiri'
 require 'rest_client'
 require 'sinatra'
 require 'sinatra/assetpack'
-require 'sinatra_more/markup_plugin'
 
 Dir[File.expand_path("lib/**/*.rb", File.dirname(__FILE__))].each { |lib| require lib }
 require (File.expand_path 'fork', File.dirname(__FILE__))
