@@ -11,6 +11,7 @@
 //= require octopress/ender
 //= require octopress/octopress
 //= require d3/d3.v2
+//= require pages
 //
 //# require jquery
 //# require jquery_ujs
