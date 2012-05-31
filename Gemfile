@@ -20,7 +20,7 @@ group :development do
   gem 'anemone'
   gem 'awesome_print'
   gem 'heroku'
-  gem 'rerun'
+  gem 'shotgun'
   gem 'foreman'
 end
 

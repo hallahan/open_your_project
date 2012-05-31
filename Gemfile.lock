@@ -74,7 +74,6 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
-    rerun (0.6.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     robotex (1.0.0)
@@ -91,6 +90,8 @@ GEM
     rubyzip (0.9.8)
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
+    shotgun (0.9)
+      rack (>= 1.0)
     shoulda (3.0.1)
       shoulda-context (~> 1.0.0)
       shoulda-matchers (~> 1.0.0)
@@ -131,12 +132,12 @@ DEPENDENCIES
   json
   nokogiri
   pismo
-  rerun
   rest-client
   rspec
   rspec-core
   rspec-expectations
   rspec-mocks
+  shotgun
   sinatra
   sinatra-assetpack
   thin
