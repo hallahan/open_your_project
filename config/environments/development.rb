@@ -28,4 +28,10 @@ OpenYourProject::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+
+  ### APPLICATION LOGIC:
+
+  config.form_pre_filled = true
+
 end

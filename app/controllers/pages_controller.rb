@@ -7,7 +7,7 @@ class PagesController < ApplicationController
         :url => 'http://en.wikipedia.org/wiki/Technological_singularity',
         :username => 'John Q. Public',
         :topic => 'Singularity',
-      } if config.form_pre_filled
+      } if CONFIG.form_pre_filled
       @page = Page.new(page_attrs || {})
     else
       #port_suffix = request.port == 80 ? '' : ":#{request.port}"

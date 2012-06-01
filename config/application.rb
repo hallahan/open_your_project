@@ -65,8 +65,15 @@ module OpenYourProject
 
     config.assets.initialize_on_precompile = false
 
+    ### APPLICATION LOGIC:
+
     #raise("Please set env var APP_SUBDOMAIN")   unless ENV['APP_SUBDOMAIN']
     #raise("Please set env var SFW_BASE_DOMAIN") unless ENV['SFW_BASE_DOMAIN']
     #raise("Please set env var SECRET_TOKEN")    unless ENV['SECRET_TOKEN']
+
+    config.form_pre_filled = false
+
   end
 end
+
+CONFIG = OpenYourProject::Application.config
