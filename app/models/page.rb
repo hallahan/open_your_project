@@ -22,10 +22,8 @@ class Page
     false
   end
 
-  # Returns the contents of the record as a nicely formatted string.
   def inspect
     inspection = if @attributes
-      p 222, @attributes
       @attributes.map{ |key, value| "#{key}: #{value}" }.join(", ")
     else
       "not initialized"
