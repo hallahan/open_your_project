@@ -1,28 +1,28 @@
 # encoding: utf-8
 
 # Set the default text field size when input is a string. Default is nil.
-# Formtastic::FormBuilder.default_text_field_size = 50
+Formtastic::FormBuilder.default_text_field_size = 50
 
 # Set the default text area height when input is a text. Default is 20.
-# Formtastic::FormBuilder.default_text_area_height = 5
+#Formtastic::FormBuilder.default_text_area_height = 5
 
 # Set the default text area width when input is a text. Default is nil.
 # Formtastic::FormBuilder.default_text_area_width = 50
 
 # Should all fields be considered "required" by default?
 # Defaults to true.
-# Formtastic::FormBuilder.all_fields_required_by_default = true
+Formtastic::FormBuilder.all_fields_required_by_default = true
 
 # Should select fields have a blank option/prompt by default?
 # Defaults to true.
-# Formtastic::FormBuilder.include_blank_for_select_by_default = true
+Formtastic::FormBuilder.include_blank_for_select_by_default = true
 
 # Set the string that will be appended to the labels/fieldsets which are required
 # It accepts string or procs and the default is a localized version of
 # '<abbr title="required">*</abbr>'. In other words, if you configure formtastic.required
 # in your locale, it will replace the abbr title properly. But if you don't want to use
 # abbr tag, you can simply give a string as below
-# Formtastic::FormBuilder.required_string = "(required)"
+#Formtastic::FormBuilder.required_string = "(required)"
 
 # Set the string that will be appended to the labels/fieldsets which are optional
 # Defaults to an empty string ("") and also accepts procs (see required_string above)
