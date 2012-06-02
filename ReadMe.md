@@ -2,9 +2,7 @@ Basics
 ======
 
     bundle install
-    cp .env.example .env
-
-Change the secret token to something long and random.
+    cp .env.example .env   # change the secret token in this file to something long and random
 
 Running a rails server
 ----------------------

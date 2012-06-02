@@ -51,6 +51,10 @@ input[type=submit]:hover {
   border: 1px solid #888;
 }
 
+.formtastic .button_action button {
+  font-size: 88%;
+}
+
 /*              */
 /* pages#indes  */
 /*              */
