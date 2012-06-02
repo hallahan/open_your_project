@@ -2,11 +2,12 @@
   %li
     &raquo;
     Transfer any Creative Commons licensed project
-    into an open wiki collaboration framework
+    into the Federated Wiki collaboration framework
   %li
     &raquo;
     Others can copy the project,
-    contribute ideas and suggest improvements
+    contribute ideas
+    and make improvements in their copy
   %li
     &raquo;
     The project acts as an idea seed, giving birth
@@ -15,11 +16,13 @@
 
 .open
   .action
-    Enter a project URL
+    Enter a Web Page to Open
   = semantic_form_for @page do |f|
     = f.inputs do
-      = f.input :url,      :placeholder => 'www.change-the-world.org' #, :class => "big"
-      = f.input :username, :placeholder => 'Your name'
-      = f.input :topic,    :placeholder => 'Topic: help categorize this content for yourself and others'
+      = f.input :url,      :label => false, :placeholder => 'www.change-the-world.org', :input_html => { :class => "big" }
+      = f.input :username, :label => false, :placeholder => 'Your name'
+      = f.input :topic,    :label => false, :placeholder => 'Topic: help categorize this content for yourself and others'
     = f.actions do
-      = f.action :submit, :as => :button #'Open Now'
+      = f.action :submit, :as => :button, :label => 'Open Now'
+
+

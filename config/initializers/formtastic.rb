@@ -23,31 +23,33 @@ Formtastic::FormBuilder.include_blank_for_select_by_default = true
 # in your locale, it will replace the abbr title properly. But if you don't want to use
 # abbr tag, you can simply give a string as below
 #Formtastic::FormBuilder.required_string = "(required)"
+Formtastic::FormBuilder.required_string = ""
 
 # Set the string that will be appended to the labels/fieldsets which are optional
 # Defaults to an empty string ("") and also accepts procs (see required_string above)
 # Formtastic::FormBuilder.optional_string = "(optional)"
+Formtastic::FormBuilder.optional_string = ""
 
 # Set the way inline errors will be displayed.
 # Defaults to :sentence, valid options are :sentence, :list, :first and :none
-# Formtastic::FormBuilder.inline_errors = :sentence
-# Formtastic uses the following classes as default for hints, inline_errors and error list
+Formtastic::FormBuilder.inline_errors = :sentence
 
+# Formtastic uses the following classes as default for hints, inline_errors and error list
 # If you override the class here, please ensure to override it in your stylesheets as well
-# Formtastic::FormBuilder.default_hint_class = "inline-hints"
-# Formtastic::FormBuilder.default_inline_error_class = "inline-errors"
-# Formtastic::FormBuilder.default_error_list_class = "errors"
+Formtastic::FormBuilder.default_hint_class = "inline-hints"
+Formtastic::FormBuilder.default_inline_error_class = "inline-errors"
+Formtastic::FormBuilder.default_error_list_class = "errors"
 
 # Set the method to call on label text to transform or format it for human-friendly
 # reading when formtastic is used without object. Defaults to :humanize.
-# Formtastic::FormBuilder.label_str_method = :humanize
+Formtastic::FormBuilder.label_str_method = :humanize
 
 # Set the array of methods to try calling on parent objects in :select and :radio inputs
 # for the text inside each @<option>@ tag or alongside each radio @<input>@. The first method
 # that is found on the object will be used.
 # Defaults to ["to_label", "display_name", "full_name", "name", "title", "username", "login", "value", "to_s"]
-# Formtastic::FormBuilder.collection_label_methods = [
-#   "to_label", "display_name", "full_name", "name", "title", "username", "login", "value", "to_s"]
+Formtastic::FormBuilder.collection_label_methods = [
+   "to_label", "display_name", "full_name", "name", "title", "username", "login", "value", "to_s"]
 
 # Additionally, you can customize the order for specific types of inputs.
 # This is configured on a type basis and if a type is not found it will

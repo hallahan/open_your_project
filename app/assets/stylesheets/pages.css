@@ -9,6 +9,11 @@
 .open .action {
   font-size: 2em;
   font-weight: bold;
+  margin-bottom: 1em;
+}
+
+ul.overview, ul.overview > li {
+  margin-left: 0;
 }
 
 ul.overview > li {
@@ -16,35 +21,35 @@ ul.overview > li {
   margin-bottom: 1em;
 }
 
-/*input {*/
-  /*margin-top: .33em;*/
-  /*-moz-border-radius: 5px;*/
-  /*-webkit-border-radius: 5px;*/
-  /*-khtml-border-radius: 5px;*/
-  /*border-radius: 5px;*/
-/*}*/
+input {
+  margin-top: .33em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+}
 
-/*input[type=text] {*/
-  /*border: 1px solid #bbb;*/
-  /*padding: 12px 8px;*/
-  /*background-color: #f9f9f9;*/
-  /*position: relative;*/
-  /*width: 444px;*/
-  /*color: #666;*/
-/*}*/
+input[type=text] {
+  border: 1px solid #bbb;
+  padding: 12px 8px;
+  background-color: #f9f9f9;
+  position: relative;
+  width: 444px;
+  color: #666;
+}
 
-/*input[type=submit] {*/
-  /*padding: .33em 1em;*/
-  /*cursor:pointer;*/
-  /*color: #111;*/
-/*}*/
+input[type=submit] {
+  padding: .33em 1em;
+  cursor:pointer;
+  color: #111;
+}
 
-/*input[type=submit]:hover {*/
-  /*text-decoration: none;*/
-  /*color: #ADD8E6;*/
-  /*cursor: pointer;*/
-  /*border: 1px solid #888;*/
-/*}*/
+input[type=submit]:hover {
+  text-decoration: none;
+  color: #ADD8E6;
+  cursor: pointer;
+  border: 1px solid #888;
+}
 
 /*              */
 /* pages#indes  */
