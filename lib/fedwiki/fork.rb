@@ -9,7 +9,7 @@ module FedWiki
 
   class NoKnownOpenLicense < RuntimeError ; end
 
-  SUBDOMAIN_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9-]{0,62}" # subdomains max at 63 characters.  although technically lower case, URLs may come in in mixed case.
+  SUBDOMAIN_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9-]{0,62}"  # Subdomain 'segments' are 1 - 63 characters.  Although technically lower case, URLs may come in as mixed case.
 
   OPEN_LICENSE_PATTERNS = %w[
     gnu.org/licenses
