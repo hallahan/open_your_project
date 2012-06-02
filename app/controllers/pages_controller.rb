@@ -26,7 +26,7 @@ class PagesController < ApplicationController
       page_url = FedWiki.open(doc, @page.url, :username => @page.username, :topic => @page.topic)
       redirect_to page_url
     rescue FedWiki::NoKnownOpenLicense
-      # add error to @fork
+      @page.errors.add :url, %{Whoops! We couldn't find a <href="http://creativecommons.org/licenses/" target="_blank">Creative Commons license</a> on this page. No action was taken.}
       render :new
     end
   end

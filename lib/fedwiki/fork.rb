@@ -26,10 +26,7 @@ module FedWiki
       return if doc.nil?
 
       license_links = open_license_links(doc)
-      if license_links.empty?
-        print "no known open license"
-        return
-      end
+      raise NoKnownOpenLicense if license_links.empty?
 
       html = doc.to_s
 
