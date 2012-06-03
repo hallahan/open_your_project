@@ -34,10 +34,11 @@
     -#    %input{:name => "q", :type => "hidden", :value => "site:openyourproject.org"}/
     -#    %input.search{:name => "q", :placeholder => "Search", :results => "0", :type => "text"}/
     %ul.main-navigation
-      %li
-        %a{:href => "/"} Open Now
-      %li
-        = link_to 'Collections', pages_path
+      - if ENV['CREATE_PAGES']
+        %li
+          %a{:href => "/"} Open Now
+        %li
+          = link_to 'Collections', pages_path
   #main
     #content
       %div
