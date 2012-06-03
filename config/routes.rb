@@ -1,6 +1,6 @@
 OpenYourProject::Application.routes.draw do
 
-  root :to => 'pages#new'
+  root :to => ENV['HOME_ROUTE'] || 'pages#new'
   resources :pages, :only => %w[ new create index ]
 
   #resources :collections, :only => %w[ index ]
